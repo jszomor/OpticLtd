@@ -7,13 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{C6C7C7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{9CA1BA51-8322-4BC1-99FE-0CD17E8F6168}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.Api", "Server\OpticLtd.Api\OpticLtd.Api.csproj", "{DFAF80EC-E304-4C55-929E-1B68AE209FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.Api", "OpticLtd.Api\OpticLtd.Api.csproj", "{DFAF80EC-E304-4C55-929E-1B68AE209FEB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.Domain", "Server\OpticLtd.Domain\OpticLtd.Domain.csproj", "{3E20DF7B-D184-40B1-95C2-A60DAD040311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.Domain", "OpticLtd.Domain\OpticLtd.Domain.csproj", "{3E20DF7B-D184-40B1-95C2-A60DAD040311}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.Data", "Server\OpticLtd.Data\OpticLtd.Data.csproj", "{1425F82E-93F0-4E6E-B696-DB2498D05EDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.Data", "OpticLtd.Data\OpticLtd.Data.csproj", "{1425F82E-93F0-4E6E-B696-DB2498D05EDB}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "OpticLtd.React.UI", "Client\OpticLtd.React.UI\OpticLtd.React.UI.njsproj", "{5EFF0634-6AF3-4327-9788-87222F30E68E}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "OpticLtd.React.UI", "..\Client\OpticLtd.React.UI\OpticLtd.React.UI.njsproj", "{5EFF0634-6AF3-4327-9788-87222F30E68E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
