@@ -32,8 +32,10 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include=".dockerignore" />
     <Content Include="dist\app-bundle.js" />
     <Content Include="dist\app-bundle.js.map" />
+    <Content Include="Dockerfile" />
     <Content Include="index.html" />
     <Content Include="server.js" />
     <Content Include="package.json" />
