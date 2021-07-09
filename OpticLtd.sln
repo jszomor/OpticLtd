@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.Domain", "Server\O
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.Data", "Server\OpticLtd.Data\OpticLtd.Data.csproj", "{1425F82E-93F0-4E6E-B696-DB2498D05EDB}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "OpticLtd.React.UI", "Client\OpticLtd.React.UI\OpticLtd.React.UI.njsproj", "{5EFF0634-6AF3-4327-9788-87222F30E68E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,10 +31,6 @@ Global
 		{1425F82E-93F0-4E6E-B696-DB2498D05EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1425F82E-93F0-4E6E-B696-DB2498D05EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1425F82E-93F0-4E6E-B696-DB2498D05EDB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5EFF0634-6AF3-4327-9788-87222F30E68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EFF0634-6AF3-4327-9788-87222F30E68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EFF0634-6AF3-4327-9788-87222F30E68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EFF0634-6AF3-4327-9788-87222F30E68E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,7 +39,6 @@ Global
 		{DFAF80EC-E304-4C55-929E-1B68AE209FEB} = {C6C7C76F-B524-4F70-A208-347E7E6C8E7A}
 		{3E20DF7B-D184-40B1-95C2-A60DAD040311} = {C6C7C76F-B524-4F70-A208-347E7E6C8E7A}
 		{1425F82E-93F0-4E6E-B696-DB2498D05EDB} = {C6C7C76F-B524-4F70-A208-347E7E6C8E7A}
-		{5EFF0634-6AF3-4327-9788-87222F30E68E} = {9CA1BA51-8322-4BC1-99FE-0CD17E8F6168}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF13E91D-9D36-408F-8790-124BE94309B7}
