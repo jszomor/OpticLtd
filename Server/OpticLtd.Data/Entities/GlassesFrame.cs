@@ -1,5 +1,4 @@
-﻿
-namespace OpticLtd.Api.Model
+﻿namespace OpticLtd.Data.Entities
 {
   public class GlassesFrame
   {

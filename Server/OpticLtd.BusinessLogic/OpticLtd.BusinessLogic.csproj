@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="GlassesFrame\Commands\" />
+    <Folder Include="GlassesFrame\EventHandlers\" />
+    <Folder Include="Mediator\" />
+    <Folder Include="Order\Commands\" />
+    <Folder Include="Order\EventHandlers\" />
+    <Folder Include="Order\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpticLtd.Data\OpticLtd.Data.csproj" />
+  </ItemGroup>
+
+</Project>
