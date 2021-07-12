@@ -10,7 +10,7 @@ namespace OpticLtd.BusinessLogic.GlassesFrame.Queries
 {
   public class GetGlassesFrames
   {
-    public class Query : IRequest<List<Data.Entities.GlassesFrame>>
+    public class Query : IRequest<List<Data.Entities.Product>>
     {
       public string Name { get; set; }
       public decimal UnitPrice { get; set; }
@@ -18,7 +18,7 @@ namespace OpticLtd.BusinessLogic.GlassesFrame.Queries
       public string AgeGroup { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, List<Data.Entities.GlassesFrame>>
+    public class Handler : IRequestHandler<Query, List<Data.Entities.Product>>
     {
 
       public Handler()
@@ -26,7 +26,7 @@ namespace OpticLtd.BusinessLogic.GlassesFrame.Queries
 
       }
 
-      public Task<List<Data.Entities.GlassesFrame>> Handle(Query request, CancellationToken cancellationToken)
+      public Task<List<Data.Entities.Product>> Handle(Query request, CancellationToken cancellationToken)
       {
         throw new NotImplementedException();
       }

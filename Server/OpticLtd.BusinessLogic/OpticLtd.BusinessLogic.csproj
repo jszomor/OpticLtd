@@ -5,12 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="GlassesFrame\Commands\" />
-    <Folder Include="GlassesFrame\EventHandlers\" />
-    <Folder Include="Mediator\" />
-    <Folder Include="Order\Commands\" />
-    <Folder Include="Order\EventHandlers\" />
-    <Folder Include="Order\Queries\" />
+    <Compile Remove="Mediator\**" />
+    <EmbeddedResource Remove="Mediator\**" />
+    <None Remove="Mediator\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +16,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpticLtd.Data\OpticLtd.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="GlassesFrame\Commands\" />
+    <Folder Include="GlassesFrame\EventHandlers\" />
+    <Folder Include="Order\Commands\" />
+    <Folder Include="Order\EventHandlers\" />
+    <Folder Include="Order\Queries\" />
   </ItemGroup>
 
 </Project>
