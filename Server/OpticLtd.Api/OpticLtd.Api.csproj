@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpticLtd.BusinessLogic\OpticLtd.BusinessLogic.csproj" />
     <ProjectReference Include="..\OpticLtd.Data\OpticLtd.Data.csproj" />
   </ItemGroup>
 

@@ -7,6 +7,7 @@ namespace OpticLtd.Data.Entities
     [Key]
     public int ProductId { get; set; }
 
+    [Required]
     [MaxLength(50)]
     public string ProductCategory { get; set; }
 
@@ -21,6 +22,14 @@ namespace OpticLtd.Data.Entities
 
     [MaxLength(50)]
     public string Brand { get; set; }
+
+    [Required]
+    public bool? Gender { get; set; }
+
+    [Required]
+    public bool? AgeGroup { get; set; }
+
+    public ProductFeature ProductFeature { get; set; }
 
   }
 }

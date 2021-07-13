@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OpticLtd.Data.Entities
 {
-  public class ProductFeatures
+  public class ProductFeature
   {
     [Key]
     public int FeatureId { get; set; }
@@ -15,12 +15,6 @@ namespace OpticLtd.Data.Entities
 
     [MaxLength(50)]
     public string Color { get; set; }
-
-    [MaxLength(20)]
-    public string Gender { get; set; }
-
-    [MaxLength(20)]
-    public string AgeGroup { get; set; }
 
     public double? FrameWidth { get; set; }
     public double? BridgeLength { get; set; }
@@ -34,6 +28,7 @@ namespace OpticLtd.Data.Entities
     [MaxLength(50)]
     public string StemType { get; set; }
 
+    [MaxLength(300)]
     public string Accessories { get; set; }
   }
 }

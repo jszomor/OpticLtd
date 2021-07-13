@@ -3,8 +3,8 @@
   public class OrderItem
   {
     public int OrderItemId { get; set; }
+    public decimal UnitPrice { get; set; }
     public int Amount { get; set; }
-    public decimal ProductUnitPrice { get; set; }
     public int ProductId { get; set; }
     public string ProductName { get; set; }
   }

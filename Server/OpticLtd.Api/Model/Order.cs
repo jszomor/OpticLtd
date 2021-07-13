@@ -8,8 +8,9 @@ namespace OpticLtd.Api.Model
   {
     public int OrderId { get; set; }
     public DateTimeOffset OrderTime { get; set; }
-    public string Name { get; set; }
-    public string Address { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Email { get; set; }
     public OrderStatus Status { get; set; }
     public ICollection<OrderItem> OrederItems { get; set; }
   }
