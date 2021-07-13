@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using OpticLtd.BusinessLogic.Product.Commands;
 using OpticLtd.BusinessLogic.Product.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using static OpticLtd.BusinessLogic.Product.Queries.GetProducts;
 namespace OpticLtd.Api.Controllers
 {
   [ApiController]
-  [Route ("api/[controller]")]
+  [Route("api/[controller]")]
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;
@@ -27,5 +28,20 @@ namespace OpticLtd.Api.Controllers
       return _mapper.Map<List<Model.Product>>(await _mediator.Send(query));
     }
 
+    [HttpGet ("{id:int}")]
+    public async Task<ActionResult<Model.Product>> GetProductById(int id)
+    {
+      GetProductById.Query query = new();
+      query.Id = id;
+
+      return _mapper.Map<Model.Product>(await _mediator.Send(query));
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateProduct([FromBody] CreateProduct.Command request)
+    {
+      var product = await _mediator.Send(request);
+      return CreatedAtAction(nameof(GetProducts), new { productId = product.ProductId }, _mapper.Map<Model.Product>(product));
+    }
   }
 }
