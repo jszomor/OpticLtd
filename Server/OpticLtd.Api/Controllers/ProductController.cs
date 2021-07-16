@@ -31,10 +31,7 @@ namespace OpticLtd.Api.Controllers
     [HttpGet ("{id:int}")]
     public async Task<ActionResult<Model.Product>> GetProductById(int id)
     {
-      GetProductById.Query query = new();
-      query.Id = id;
-
-      return _mapper.Map<Model.Product>(await _mediator.Send(query));
+      return _mapper.Map<Model.Product>(await _mediator.Send(new GetProductById.Query(id)));
     }
 
     [HttpPost]
@@ -42,6 +39,20 @@ namespace OpticLtd.Api.Controllers
     {
       var product = await _mediator.Send(request);
       return CreatedAtAction(nameof(GetProducts), new { productId = product.ProductId }, _mapper.Map<Model.Product>(product));
+    }
+
+    [HttpDelete ("{id:int}")]
+    public async Task<ActionResult> DeleteProduct([FromBody] int id)
+    {
+      _mapper.Map<Model.Product>(await _mediator.Send(new DeleteProduct.Command(id)));
+
+      return NoContent();
+    }
+
+    [HttpPut ("{id:int}")]
+    public async Task<ActionResult<Model.Product>> UpdateProduct([FromBody] int id)
+    {
+      return _mapper.Map<Model.Product>(await _mediator.Send(new UpdateProduct.Command(id)));      
     }
   }
 }

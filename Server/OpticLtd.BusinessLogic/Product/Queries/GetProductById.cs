@@ -13,7 +13,15 @@ namespace OpticLtd.BusinessLogic.Product.Queries
   {
     public class Query : IRequest<Data.Entities.Product>
     {
-      public int Id { get; set; }
+      public int _id { get; set; }
+      public Query(int Id)
+      {
+        _id = Id;
+      }
+      public Query()
+      {
+
+      }
     }
     public class Handler : IRequestHandler<Query, Data.Entities.Product>
     {
@@ -26,7 +34,7 @@ namespace OpticLtd.BusinessLogic.Product.Queries
 
       public async Task<Data.Entities.Product> Handle(Query request, CancellationToken cancellationToken)
       {
-        return await FindProductByIdAsync(request.Id);
+        return await FindProductByIdAsync(request._id);
       }
 
       public async Task<Data.Entities.Product> FindProductByIdAsync(int id)
