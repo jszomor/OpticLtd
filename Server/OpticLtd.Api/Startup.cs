@@ -27,8 +27,8 @@ namespace OpticLtd.Api
       services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Defaultconnection")));
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
       services.AddAutoMapper(typeof(Startup));
-      services.AddControllers();
       services.AddMediatR(typeof(GetProducts));
+      services.AddControllers();
       services.AddSwaggerGen(c =>
       {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "OpticLtd.Api", Version = "v1" });

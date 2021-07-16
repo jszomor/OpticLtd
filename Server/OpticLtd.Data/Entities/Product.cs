@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OpticLtd.Data.Entities
 {
@@ -29,6 +30,8 @@ namespace OpticLtd.Data.Entities
     [Required]
     public bool? AgeGroup { get; set; }
 
+    [ForeignKey ("ProductFeature")]
+    public int FeatureId { get; set; }
     public ProductFeature ProductFeature { get; set; }
 
   }

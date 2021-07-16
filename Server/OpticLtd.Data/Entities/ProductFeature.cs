@@ -8,11 +8,6 @@ namespace OpticLtd.Data.Entities
     [Key]
     public int FeatureId { get; set; }
 
-    [ForeignKey("Product")]
-    public int ProductId { get; set; }
-
-    public Product Product { get; set; }
-
     [MaxLength(50)]
     public string Color { get; set; }
 

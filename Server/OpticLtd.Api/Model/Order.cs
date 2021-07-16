@@ -12,6 +12,6 @@ namespace OpticLtd.Api.Model
     public string LastName { get; set; }
     public string Email { get; set; }
     public OrderStatus Status { get; set; }
-    public ICollection<OrderItem> OrederItems { get; set; }
+    public ICollection<Model.OrderItem> OrederItems { get; set; }
   }
 }

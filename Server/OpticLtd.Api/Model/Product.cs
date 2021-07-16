@@ -1,6 +1,4 @@
 ﻿
-using OpticLtd.Data.Entities;
-
 namespace OpticLtd.Api.Model
 {
   public class Product
@@ -12,8 +10,9 @@ namespace OpticLtd.Api.Model
     public int Stock { get; set; }
     public string Picture { get; set; }
     public string Brand { get; set; }
-    public bool Gender { get; set; }
-    public bool AgeGroup { get; set; }
-    public Data.Entities.ProductFeature ProductFeature { get; set; }
+    public bool? Gender { get; set; }
+    public bool? AgeGroup { get; set; }
+    public int FeatureId { get; set; }
+    public ProductFeatureApi ProductFeature { get; set; }
   }
 }

@@ -5,12 +5,11 @@ using OpticLtd.BusinessLogic.Product.Commands;
 using OpticLtd.BusinessLogic.Product.Queries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static OpticLtd.BusinessLogic.Product.Queries.GetProducts;
 
 namespace OpticLtd.Api.Controllers
 {
   [ApiController]
-  [Route("api/[controller]")]
+  [Route("[controller]")]
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;
@@ -23,12 +22,12 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Model.Product>>> GetProducts([FromQuery] GetProducts.Query query)
+    public async Task<ActionResult<List<Api.Model.Product>>> GetProducts([FromQuery] GetProducts.Query query)
     {
-      return _mapper.Map<List<Model.Product>>(await _mediator.Send(query));
+      return _mapper.Map<List<Api.Model.Product>>(await _mediator.Send(query));
     }
 
-    [HttpGet ("{id:int}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<Model.Product>> GetProductById(int id)
     {
       return _mapper.Map<Model.Product>(await _mediator.Send(new GetProductById.Query(id)));
@@ -41,7 +40,7 @@ namespace OpticLtd.Api.Controllers
       return CreatedAtAction(nameof(GetProducts), new { productId = product.ProductId }, _mapper.Map<Model.Product>(product));
     }
 
-    [HttpDelete ("{id:int}")]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteProduct([FromBody] int id)
     {
       _mapper.Map<Model.Product>(await _mediator.Send(new DeleteProduct.Command(id)));
@@ -49,10 +48,10 @@ namespace OpticLtd.Api.Controllers
       return NoContent();
     }
 
-    [HttpPut ("{id:int}")]
+    [HttpPut("{id:int}")]
     public async Task<ActionResult<Model.Product>> UpdateProduct([FromBody] int id)
     {
-      return _mapper.Map<Model.Product>(await _mediator.Send(new UpdateProduct.Command(id)));      
+      return _mapper.Map<Model.Product>(await _mediator.Send(new UpdateProduct.Command(id)));
     }
   }
 }
