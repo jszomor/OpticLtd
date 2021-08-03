@@ -3,6 +3,7 @@ using OpticLtd.BusinessLogic.Mediator;
 using OpticLtd.Data;
 using OpticLtd.Data.Entities;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,16 +13,16 @@ namespace OpticLtd.BusinessLogic.Product.Commands
   {
     public class Command : ICommand<Data.Entities.Product>
     {
-      public Command()
-      {
+      //public Command()
+      //{
 
-      }
-      public Command(int Id)
-      {
-        _id = Id;
-      }
+      //}
+      //public Command(int Id)
+      //{
+      //  _id = Id;
+      //}
 
-      public int _id { get; set; }
+      public int Id { get; set; }
       public string ProductCategory { get; set; }
       public string ProductName { get; set; }
       public string Description { get; set; }
@@ -44,17 +45,20 @@ namespace OpticLtd.BusinessLogic.Product.Commands
 
       public async Task<Data.Entities.Product> Handle(Command request, CancellationToken cancellationToken)
       {
-        var product = _context.Products.FirstOrDefault(n => n.ProductId == request._id);
+        var product = _context.Products.FirstOrDefault(n => n.ProductId == request.Id);
 
-        product.ProductCategory = request.ProductCategory;
-        product.ProductName = request.ProductName;
-        product.Description = request.Description;
+        if (product == null)
+          return null;
+
+        product.ProductCategory = request.ProductCategory != null ? request.ProductCategory : product.ProductCategory;
+        product.ProductName = request.ProductName != null ? request.ProductName : product.ProductName;
+        product.Description = request.Description != null ? request.Description : product.Description;
         product.Stock = request.Stock;
-        product.Picture = request.Picture;
-        product.Brand = request.Brand;
-        product.Gender = request.Gender;
-        product.AgeGroup = request.AgeGroup;
-        product.ProductFeature = request.ProductFeature;
+        product.Picture = request.Picture != null ? request.Picture : product.Picture;
+        product.Brand = request.Brand != null ? request.Brand : product.Brand;
+        product.Gender = request.Gender != null ? request.Gender : product.Gender;
+        product.AgeGroup = request.AgeGroup != null ? request.AgeGroup : product.AgeGroup;
+        product.ProductFeature = request.ProductFeature != null ? request.ProductFeature : product.ProductFeature;
 
         _context.Update(product);
         await _context.SaveChangesAsync();

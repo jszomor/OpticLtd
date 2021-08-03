@@ -41,17 +41,17 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeleteProduct([FromBody] int id)
+    public async Task<ActionResult> DeleteProduct(int id)
     {
       _mapper.Map<Model.Product>(await _mediator.Send(new DeleteProduct.Command(id)));
 
       return NoContent();
     }
 
-    [HttpPut("{id:int}")]
-    public async Task<ActionResult<Model.Product>> UpdateProduct([FromBody] int id)
+    [HttpPut]
+    public async Task<ActionResult<Model.Product>> UpdateProduct([FromQuery] UpdateProduct.Command command)
     {
-      return _mapper.Map<Model.Product>(await _mediator.Send(new UpdateProduct.Command(id)));
+      return _mapper.Map<Model.Product>(await _mediator.Send(command));
     }
   }
 }
