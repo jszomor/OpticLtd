@@ -31,11 +31,11 @@ namespace OpticLtd.BusinessLogic.Product.Queries
       public async Task<List<Data.Entities.Product>> Handle(Query request, CancellationToken cancellationToken)
       {
         return await _context.Products
-          .Where(p => p.ProductName == null || p.ProductName.StartsWith(request.Name))
-          .Where(p => p.ProductCategory == null || p.ProductCategory.StartsWith(request.Category))
-          .Where(p => p.Gender == null || p.Gender == request.Gender)
-          .Where(p => p.AgeGroup == null || p.AgeGroup == request.AgeGroup)
-          .Where(p => p.Brand == null || p.Brand.StartsWith(request.Brand))
+          .Where(p => request.Name == null || p.ProductName.StartsWith(request.Name))
+          .Where(p => request.Category == null || p.ProductCategory.StartsWith(request.Category))
+          .Where(p => request.Gender == null || p.Gender == request.Gender)
+          .Where(p => request.AgeGroup == null || p.AgeGroup == request.AgeGroup)
+          .Where(p => request.Brand == null || p.Brand.StartsWith(request.Brand))
           .ToListAsync();
       }
     }

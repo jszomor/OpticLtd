@@ -10,7 +10,7 @@ using OpticLtd.Data;
 namespace OpticLtd.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210803131139_initCreate")]
+    [Migration("20210803161739_initCreate")]
     partial class initCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,10 +164,12 @@ namespace OpticLtd.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -204,10 +206,12 @@ namespace OpticLtd.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -247,7 +251,7 @@ namespace OpticLtd.Data.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("OpticLtd.Data.Entities.OrderItem", b =>
@@ -286,7 +290,6 @@ namespace OpticLtd.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool?>("AgeGroup")
-                        .IsRequired()
                         .HasColumnType("bit");
 
                     b.Property<string>("Brand")
@@ -296,11 +299,10 @@ namespace OpticLtd.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FeatureId")
+                    b.Property<int?>("FeatureId")
                         .HasColumnType("int");
 
                     b.Property<bool?>("Gender")
-                        .IsRequired()
                         .HasColumnType("bit");
 
                     b.Property<string>("Picture")
@@ -312,9 +314,6 @@ namespace OpticLtd.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("ProductFeatureFeatureId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -325,7 +324,7 @@ namespace OpticLtd.Data.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("ProductFeatureFeatureId");
+                    b.HasIndex("FeatureId");
 
                     b.ToTable("Products");
                 });
@@ -447,7 +446,7 @@ namespace OpticLtd.Data.Migrations
                 {
                     b.HasOne("OpticLtd.Data.Entities.ProductFeature", "ProductFeature")
                         .WithMany()
-                        .HasForeignKey("ProductFeatureFeatureId");
+                        .HasForeignKey("FeatureId");
 
                     b.Navigation("ProductFeature");
                 });
