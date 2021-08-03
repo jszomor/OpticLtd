@@ -24,14 +24,11 @@ namespace OpticLtd.Data.Entities
     [MaxLength(50)]
     public string Brand { get; set; }
 
-    [Required]
     public bool? Gender { get; set; }
 
-    [Required]
     public bool? AgeGroup { get; set; }
 
-    [ForeignKey ("ProductFeature")]
-    public int FeatureId { get; set; }
+    [ForeignKey ("FeatureId")]
     public ProductFeature ProductFeature { get; set; }
 
   }

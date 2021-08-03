@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace OpticLtd.Api.Controllers
 {
   [ApiController]
-  [Route("[controller]")]
+  [Route("api/[controller]")]
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;
