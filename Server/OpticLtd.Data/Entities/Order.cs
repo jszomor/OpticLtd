@@ -21,6 +21,7 @@ namespace OpticLtd.Data.Entities
 
     [Required]
     [MaxLength(100)]
+    [EmailAddress]
     public string Email { get; set; }
     public OrderStatus Status { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; }
