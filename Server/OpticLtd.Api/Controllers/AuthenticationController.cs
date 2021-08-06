@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpticLtd.Api.Configuration;
@@ -67,21 +68,27 @@ namespace OpticLtd.Api.Controllers
     {
       if(ModelState.IsValid)
       {
-        await VerifyToken(tokenRequest);
+        var result = await VerifyAndGenerateToken(tokenRequest);
+        if(result == null)
+        {
+          BadRequestAuth("Invalid tokens");
+        }
+
+        return Ok(result);
       }
 
       return BadRequestAuth("Invalid payload");
     }
 
-    private async Task<AuthResult> VerifyToken(TokenRequest tokenRequest)
+    private async Task<AuthResult> VerifyAndGenerateToken(TokenRequest tokenRequest)
     {
       var jwtTokenHandler = new JwtSecurityTokenHandler();
       try
       {
-        //Validation 1
+        // Validation 1
         var tokenVerification = jwtTokenHandler.ValidateToken(tokenRequest.Token, _tokenValidationParams,  out var validatedToken);
 
-        //Validation 2
+        // Validation 2
         if(validatedToken is JwtSecurityToken securityToken)
         {
           bool result = securityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
@@ -92,14 +99,57 @@ namespace OpticLtd.Api.Controllers
           }
         }
 
-        //Validation 3
+        // Validation 3
         var utcExpiryDate = long.Parse(tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+        var expiryDate = UnixTimeStampToDateTime(utcExpiryDate);
+        if(expiryDate > DateTime.UtcNow.AddHours(2)) return AuthResultResponse("Token has not yet expired");
 
+        // Validation 4
+        var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokenRequest.Token);
+        if(storedToken == null) return AuthResultResponse("Token does not exist");
+
+        // Validation 5
+        if(storedToken.IsUsed) return AuthResultResponse("Token has been used");
+
+        // Validation 6
+        if(storedToken.IsRevoked) return AuthResultResponse("Token has been revoked");
+
+        // Validation 7
+        var jti = tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+        if (storedToken.JwtId != jti) return AuthResultResponse("Token does not match");
+
+        // Updated current token
+        storedToken.IsUsed = true;
+        _context.RefreshTokens.Update(storedToken);
+        await _context.SaveChangesAsync();
+
+        // Generate a new token
+        var dbUser = await _userManager.FindByIdAsync(storedToken.UserId);
+        return await GenerateJwtToken(dbUser);
       }
       catch (Exception)
       {
-        return null;
+        return AuthResultResponse("Exception thrown >> tokenVerification is null");
       }
+    }
+
+    private AuthResult AuthResultResponse (string message)
+    {
+      return new AuthResult()
+      {
+        Success = false,
+        Errors = new List<string>()
+        {
+          message
+        }
+      };
+    }
+
+    private DateTime UnixTimeStampToDateTime(long unixTimeStamp)
+    {
+      var dateTimeVal = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+      dateTimeVal = dateTimeVal.AddSeconds(unixTimeStamp).ToLocalTime();
+      return dateTimeVal;
     }
 
     [HttpPost]
