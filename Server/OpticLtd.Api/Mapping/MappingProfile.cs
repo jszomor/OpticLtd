@@ -10,6 +10,7 @@ namespace OpticLtd.Api.Mapping
       CreateMap<Data.Entities.ProductFeature, Model.ProductFeatureApi>();
       CreateMap<Data.Entities.Order, Model.Order>();
       CreateMap<Data.Entities.OrderItem, Model.OrderItem>();
+      CreateMap<Data.Entities.RefreshToken, Model.RefreshToken>();
     }
   }
 }

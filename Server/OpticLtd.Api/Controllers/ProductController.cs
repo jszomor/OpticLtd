@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpticLtd.BusinessLogic.Product.Commands;
 using OpticLtd.BusinessLogic.Product.Queries;
@@ -10,6 +12,7 @@ namespace OpticLtd.Api.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
+  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;

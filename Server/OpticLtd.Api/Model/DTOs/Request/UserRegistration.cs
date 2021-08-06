@@ -4,7 +4,6 @@ namespace OpticLtd.Api.Model.DTOs.Request
 {
   public class UserRegistration
   {
-    [Required]
     public string UserName { get; set; }
 
     [Required]

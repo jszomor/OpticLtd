@@ -14,5 +14,6 @@ namespace OpticLtd.Data
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductFeature> ProductFeatures { get; set; }
     public DbSet<Order> Orders { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
   }
 }

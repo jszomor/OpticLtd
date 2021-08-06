@@ -33,6 +33,20 @@ namespace OpticLtd.Api
 
       services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Defaultconnection")));
 
+      var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+      var tokenValidationParams = new TokenValidationParameters
+      {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        RequireExpirationTime = false
+      };
+
+      services.AddSingleton(tokenValidationParams);
+
       services.AddAuthentication(options =>
       {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -40,19 +54,8 @@ namespace OpticLtd.Api
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
       }).AddJwtBearer(jwt =>
       {
-        var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
-
         jwt.SaveToken = true;
-        jwt.TokenValidationParameters = new TokenValidationParameters
-        {
-          ValidateIssuerSigningKey = true,
-          IssuerSigningKey = new SymmetricSecurityKey(key),
-          ValidateIssuer = false,
-          ValidateAudience = false,
-          ValidateLifetime = true,
-          RequireExpirationTime = false
-        };
-
+        jwt.TokenValidationParameters = tokenValidationParams;
       });
 
       services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -62,9 +65,31 @@ namespace OpticLtd.Api
       services.AddAutoMapper(typeof(Startup));
       services.AddMediatR(typeof(GetProducts));
       services.AddControllers();
-      services.AddSwaggerGen(c =>
+      services.AddSwaggerGen(config =>
       {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "OpticLtd.Api", Version = "v1" });
+        config.SwaggerDoc("v1", new OpenApiInfo { Title = "OpticLtd.Api", Version = "v1" });
+        config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+          Description = "JWT Authorization",
+          Name = "Authorization",
+          In = ParameterLocation.Header,
+          Type = SecuritySchemeType.ApiKey,
+          Scheme = "Bearer"
+        });
+        config.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+          {
+            new OpenApiSecurityScheme
+            {
+              Reference = new OpenApiReference
+              {
+                Type= ReferenceType.SecurityScheme,
+                Id = "Bearer"
+              }
+            },
+            new string[] {}
+          }
+        });
       });
     }
 
