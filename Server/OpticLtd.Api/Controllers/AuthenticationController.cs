@@ -85,7 +85,7 @@ namespace OpticLtd.Api.Controllers
       var jwtTokenHandler = new JwtSecurityTokenHandler();
       try
       {
-        // Validation 1
+        // Validation 1 - Validation JWT token format
         var tokenVerification = jwtTokenHandler.ValidateToken(tokenRequest.Token, _tokenValidationParams,  out var validatedToken);
 
         // Validation 2
@@ -102,10 +102,11 @@ namespace OpticLtd.Api.Controllers
         // Validation 3
         var utcExpiryDate = long.Parse(tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
         var expiryDate = UnixTimeStampToDateTime(utcExpiryDate);
-        if(expiryDate > DateTime.UtcNow.AddHours(2)) return AuthResultResponse("Token has not yet expired");
+        var actualTime = DateTime.UtcNow.AddHours(2);
+        if (expiryDate > actualTime) return AuthResultResponse("Token has not yet expired");
 
-        // Validation 4
-        var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokenRequest.Token);
+        // Validation 4 - validate existence of the token
+        var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokenRequest.RefreshToken);
         if(storedToken == null) return AuthResultResponse("Token does not exist");
 
         // Validation 5
@@ -127,9 +128,16 @@ namespace OpticLtd.Api.Controllers
         var dbUser = await _userManager.FindByIdAsync(storedToken.UserId);
         return await GenerateJwtToken(dbUser);
       }
-      catch (Exception)
+      catch (Exception ex)
       {
-        return AuthResultResponse("Exception thrown >> tokenVerification is null");
+        if (ex.Message.Contains("Lifetime validation failed. The token is expired."))
+        {
+          return AuthResultResponse("Token has expired please re-login");
+        }
+        else
+        {
+          return AuthResultResponse("Something went wrong");          
+        }
       }
     }
 
