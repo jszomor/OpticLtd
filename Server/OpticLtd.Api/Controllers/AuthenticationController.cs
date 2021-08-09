@@ -173,7 +173,7 @@ namespace OpticLtd.Api.Controllers
           return BadRequestAuth("Email already in use");
         }
 
-        var newUser = new IdentityUser() { Email = user.Email, UserName = user.UserName };
+        var newUser = new IdentityUser() { Email = user.Email, UserName = user.UserName, PhoneNumber = user.PhoneNumber };
         var isCreated = await _userManager.CreateAsync(newUser, user.Password);
 
         if(isCreated.Succeeded)

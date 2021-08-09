@@ -21,7 +21,7 @@ namespace OpticLtd.BusinessLogic.Product.EventHandlers
     {
       foreach (var item in notification.Order.OrderItems)
       {
-        await ChangeProductStockAsync(item.ProductId, -item.Amount);
+        await ChangeProductStockAsync(item.ProductId, -item.Quantity);
       }
     }
 

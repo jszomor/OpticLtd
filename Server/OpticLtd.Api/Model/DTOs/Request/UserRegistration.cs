@@ -12,5 +12,7 @@ namespace OpticLtd.Api.Model.DTOs.Request
 
     [Required]
     public string Password { get; set; }
+
+    public string PhoneNumber { get; set; }
   }
 }

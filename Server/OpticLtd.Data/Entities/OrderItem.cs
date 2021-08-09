@@ -10,14 +10,12 @@ namespace OpticLtd.Data.Entities
 
     [Column(TypeName = "decimal(18,4)")]
     public decimal UnitPrice { get; set; }
-    public int Amount { get; set; }
+    public int Quantity { get; set; }
 
-    [ForeignKey("Product")]
-    public int ProductId { get; set; }
+    [ForeignKey("ProductId")]
     public Product Product { get; set; }
 
-    [ForeignKey("Order")]
-    public int OrderId { get; set; }
+    [ForeignKey("OrderId")]
     public Order Order { get; set; }
   }
 }

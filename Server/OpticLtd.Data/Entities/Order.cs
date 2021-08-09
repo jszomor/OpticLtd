@@ -12,12 +12,11 @@ namespace OpticLtd.Data.Entities
     public DateTimeOffset OrderTime { get; set; }
 
     [Required]
-    [MaxLength(50)]
-    public string FirstName { get; set; }
+    [MaxLength(150)]
+    public string CustomerName { get; set; }
 
-    [Required]
-    [MaxLength(50)]
-    public string LastName { get; set; }
+    [MaxLength(150)]
+    public string PhoneNumber { get; set; }
 
     [Required]
     [MaxLength(100)]
