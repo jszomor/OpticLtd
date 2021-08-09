@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OpticLtd.Data.Entities
 {
@@ -22,6 +23,8 @@ namespace OpticLtd.Data.Entities
     [MaxLength(100)]
     [EmailAddress]
     public string Email { get; set; }
+
+    [Column(TypeName = "varchar(50)")]
     public OrderStatus Status { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; }
   }

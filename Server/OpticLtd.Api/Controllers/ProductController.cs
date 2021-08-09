@@ -12,7 +12,7 @@ namespace OpticLtd.Api.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
-  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Admin")]
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;
