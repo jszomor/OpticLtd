@@ -45,7 +45,9 @@ namespace OpticLtd.Api
         RequireExpirationTime = false
       };
 
-      services.AddSingleton(tokenValidationParams);
+      var clonedParams = tokenValidationParams.Clone();
+      clonedParams.ValidateLifetime = false;
+      services.AddSingleton(clonedParams);
 
       services.AddAuthentication(options =>
       {
@@ -56,15 +58,24 @@ namespace OpticLtd.Api
       {
         jwt.SaveToken = true;
         jwt.TokenValidationParameters = tokenValidationParams;
+        
       });
 
-      services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                        .AddEntityFrameworkStores<AppDbContext>();
+      services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddEntityFrameworkStores<AppDbContext>();
+
 
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
       services.AddAutoMapper(typeof(Startup));
       services.AddMediatR(typeof(GetProducts));
       services.AddControllers();
+
+      services.AddAuthorization(options =>
+      {
+        options.AddPolicy("ValidRoles", policy => policy.RequireRole("Admin", "Customer"));
+
+      });
+
       services.AddSwaggerGen(config =>
       {
         config.SwaggerDoc("v1", new OpenApiInfo { Title = "OpticLtd.Api", Version = "v1" });

@@ -12,7 +12,7 @@ namespace OpticLtd.Api.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
-  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Admin")]
+  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;
@@ -39,7 +39,7 @@ namespace OpticLtd.Api.Controllers
     [HttpPost]
     public async Task<ActionResult> CreateProduct([FromBody] CreateProduct.Command request)
     {
-      var product = await _mediator.Send(request);
+      Data.Entities.Product product = await _mediator.Send(request);
       return CreatedAtAction(nameof(GetProducts), new { productId = product.ProductId }, _mapper.Map<Model.Product>(product));
     }
 

@@ -12,8 +12,4 @@
     <ProjectReference Include="..\OpticLtd.Data\OpticLtd.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Order\Commands\" />
-  </ItemGroup>
-
 </Project>

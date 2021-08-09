@@ -26,13 +26,15 @@ namespace OpticLtd.Api.Controllers
     private readonly JwtConfig _jwtConfig;
     private readonly TokenValidationParameters _tokenValidationParams;
     private readonly AppDbContext _context;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AuthenticationController(UserManager<IdentityUser> userManager, IOptionsMonitor<JwtConfig> optionsMonitor, TokenValidationParameters tokenValidationParams, AppDbContext context)
+    public AuthenticationController(UserManager<IdentityUser> userManager, IOptionsMonitor<JwtConfig> optionsMonitor, TokenValidationParameters tokenValidationParams, AppDbContext context, RoleManager<IdentityRole> roleManager)
     {
       _userManager = userManager;
       _tokenValidationParams = tokenValidationParams;
       _context = context;
       _jwtConfig = optionsMonitor.CurrentValue;
+      _roleManager = roleManager;
     }
 
     [HttpPost]
@@ -160,6 +162,29 @@ namespace OpticLtd.Api.Controllers
       return dateTimeVal;
     }
 
+    //[HttpPost]
+    //[Route("CreateRole")]
+    //public async Task<IActionResult> CreateRole(RoleViewModel vm)
+    //{
+    //  await _roleManager.CreateAsync(new IdentityRole { Name = vm.Name });
+
+    //  return RedirectToAction("Index");
+    //}
+
+    //[HttpPost]
+    //[Route("UpdateUserRole")]
+    //public async Task<IActionResult> UpdateUserRole(UpdateUserRoleViewModel vm)
+    //{
+    //  var user = await _userManager.FindByEmailAsync(vm.UserEmail);
+
+    //  if (vm.Delete)
+    //    await _userManager.RemoveFromRoleAsync(user, vm.Role);
+    //  else
+    //    await _userManager.AddToRoleAsync(user, vm.Role);
+
+    //  return RedirectToAction("Index");
+    //}
+
     [HttpPost]
     [Route("Register")]
     public async Task<IActionResult> Register([FromBody] UserRegistration user)
@@ -219,7 +244,8 @@ namespace OpticLtd.Api.Controllers
         {
           new Claim("Id", user.Id),
           new Claim(JwtRegisteredClaimNames.Email, user.Email),
-          new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+          new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+          new Claim(ClaimTypes.Role, "Admin")
         }),
         Expires = DateTime.UtcNow.AddSeconds(30), //5-10 min
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
