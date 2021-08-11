@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using OpticLtd.Data;
 using OpticLtd.Domain.Configuration;
 using OpticLtd.Domain.DTOs.Request;
-using OpticLtd.Domain.DTOs.Response;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OpticLtd.BusinessLogic.Services
 {
-  public class AuthServices
+  public class TokenServices
   {
     private readonly TokenValidationParameters _tokenValidationParams;
     private readonly AppDbContext _context;
