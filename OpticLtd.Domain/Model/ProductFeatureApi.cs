@@ -1,5 +1,5 @@
 ﻿
-namespace OpticLtd.Api.Model
+namespace OpticLtd.Domain.Model
 {
   public class ProductFeatureApi
   {

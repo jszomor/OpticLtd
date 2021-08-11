@@ -6,11 +6,11 @@ namespace OpticLtd.Api.Mapping
   {
     public MappingProfile()
     {
-      CreateMap<Data.Entities.Product, Model.Product>();
-      CreateMap<Data.Entities.ProductFeature, Model.ProductFeatureApi>();
-      CreateMap<Data.Entities.Order, Model.Order>();
-      CreateMap<Data.Entities.OrderItem, Model.OrderItem>();
-      CreateMap<Data.Entities.RefreshToken, Model.RefreshToken>();
+      CreateMap<Data.Entities.Product, Domain.Model.Product>();
+      CreateMap<Data.Entities.ProductFeature, Domain.Model.ProductFeatureApi>();
+      CreateMap<Data.Entities.Order, Domain.Model.Order>();
+      CreateMap<Data.Entities.OrderItem, Domain.Model.OrderItem>();
+      CreateMap<Data.Entities.RefreshToken, Domain.Model.RefreshToken>();
     }
   }
 }

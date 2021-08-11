@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OpticLtd.Api.Configuration
+namespace OpticLtd.Domain.Configuration
 {
   public class AuthResult
   {

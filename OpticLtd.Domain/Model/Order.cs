@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpticLtd.Api.Model
+namespace OpticLtd.Domain.Model
 {
   public class Order
   {

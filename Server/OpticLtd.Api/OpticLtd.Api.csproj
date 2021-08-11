@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\OpticLtd.Domain\OpticLtd.Domain.csproj" />
     <ProjectReference Include="..\OpticLtd.BusinessLogic\OpticLtd.BusinessLogic.csproj" />
     <ProjectReference Include="..\OpticLtd.Data\OpticLtd.Data.csproj" />
   </ItemGroup>

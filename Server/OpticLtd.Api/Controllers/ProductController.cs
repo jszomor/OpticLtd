@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 namespace OpticLtd.Api.Controllers
 {
   [ApiController]
-  [Route("api/[controller]")]
-  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+  [Route("api/[controller]")]  
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;
@@ -37,6 +36,7 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public async Task<ActionResult> CreateProduct([FromBody] CreateProduct.Command request)
     {
       Data.Entities.Product product = await _mediator.Send(request);
@@ -44,6 +44,7 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public async Task<ActionResult> DeleteProduct(int id)
     {
       _mapper.Map<Model.Product>(await _mediator.Send(new DeleteProduct.Command(id)));
@@ -52,6 +53,7 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPut]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public async Task<ActionResult<Model.Product>> UpdateProduct([FromQuery] UpdateProduct.Command command)
     {
       return _mapper.Map<Model.Product>(await _mediator.Send(command));

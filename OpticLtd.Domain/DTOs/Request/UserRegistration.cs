@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OpticLtd.Api.Model.DTOs.Request
+namespace OpticLtd.Domain.DTOs.Request
 {
   public class UserRegistration
   {
