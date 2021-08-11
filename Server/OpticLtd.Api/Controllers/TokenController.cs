@@ -21,12 +21,12 @@ namespace OpticLtd.Api.Controllers
   public class TokenController : ControllerHelper
   {
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly TokenServices _tokenServices;
 
-    TokenServices TokenServices = new();
-
-    public TokenController(UserManager<IdentityUser> userManager)
+    public TokenController(UserManager<IdentityUser> userManager, TokenServices tokenServices)
     {
       _userManager = userManager;
+      _tokenServices = tokenServices;
     }
 
     [HttpPost]
@@ -35,7 +35,7 @@ namespace OpticLtd.Api.Controllers
     {
       if(ModelState.IsValid)
       {
-        var result = await TokenServices.VerifyAndGenerateToken(tokenRequest, _userManager);
+        var result = await _tokenServices.VerifyAndGenerateToken(tokenRequest, _userManager);
         if(result == null)
         {
           BadRequestAuth("Invalid tokens");

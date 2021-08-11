@@ -20,6 +20,14 @@ namespace OpticLtd.BusinessLogic.Services
     private readonly AppDbContext _context;
     private readonly JwtConfig _jwtConfig;
 
+    public TokenServices(JwtConfig jwtConfig, AppDbContext context, TokenValidationParameters tokenValidationParams)
+    {
+      _jwtConfig = jwtConfig;
+      _context = context;
+      _tokenValidationParams = tokenValidationParams;
+    }
+
+
     public async Task<AuthResult> VerifyAndGenerateToken(TokenRequest tokenRequest, UserManager<IdentityUser> _userManager)
     {
       var jwtTokenHandler = new JwtSecurityTokenHandler();

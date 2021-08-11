@@ -24,15 +24,15 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Api.Model.Product>>> GetProducts([FromQuery] GetProducts.Query query)
+    public async Task<ActionResult<List<Domain.Model.Product>>> GetProducts([FromQuery] GetProducts.Query query)
     {
-      return _mapper.Map<List<Api.Model.Product>>(await _mediator.Send(query));
+      return _mapper.Map<List<Domain.Model.Product>>(await _mediator.Send(query));
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Model.Product>> GetProductById(int id)
+    public async Task<ActionResult<Domain.Model.Product>> GetProductById(int id)
     {
-      return _mapper.Map<Model.Product>(await _mediator.Send(new GetProductById.Query(id)));
+      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(new GetProductById.Query(id)));
     }
 
     [HttpPost]
@@ -40,23 +40,23 @@ namespace OpticLtd.Api.Controllers
     public async Task<ActionResult> CreateProduct([FromBody] CreateProduct.Command request)
     {
       Data.Entities.Product product = await _mediator.Send(request);
-      return CreatedAtAction(nameof(GetProducts), new { productId = product.ProductId }, _mapper.Map<Model.Product>(product));
+      return CreatedAtAction(nameof(GetProducts), new { productId = product.ProductId }, _mapper.Map<Domain.Model.Product>(product));
     }
 
     [HttpDelete("{id:int}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public async Task<ActionResult> DeleteProduct(int id)
     {
-      _mapper.Map<Model.Product>(await _mediator.Send(new DeleteProduct.Command(id)));
+      _mapper.Map<Domain.Model.Product>(await _mediator.Send(new DeleteProduct.Command(id)));
 
       return NoContent();
     }
 
     [HttpPut]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
-    public async Task<ActionResult<Model.Product>> UpdateProduct([FromQuery] UpdateProduct.Command command)
+    public async Task<ActionResult<Domain.Model.Product>> UpdateProduct([FromQuery] UpdateProduct.Command command)
     {
-      return _mapper.Map<Model.Product>(await _mediator.Send(command));
+      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }
   }
 }

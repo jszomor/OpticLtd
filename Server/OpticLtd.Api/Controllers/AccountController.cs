@@ -11,16 +11,17 @@ using System.Threading.Tasks;
 
 namespace OpticLtd.Api.Controllers
 {
+  [ApiController]
+  [Route("api/[controller]")]
   public class AccountController : ControllerHelper
   {
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private TokenServices _tokenServices;
+    public TokenServices _tokenServices;
 
-    public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+    public AccountController(UserManager<IdentityUser> userManager, TokenServices tokenServices)
     {
       _userManager = userManager;
-      _signInManager = signInManager;
+      _tokenServices = tokenServices;
     }
 
     [HttpPost]

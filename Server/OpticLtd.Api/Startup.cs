@@ -9,10 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using OpticLtd.Api.Configuration;
 using OpticLtd.BusinessLogic.Mediator;
 using OpticLtd.BusinessLogic.Product.Queries;
+using OpticLtd.BusinessLogic.Services;
 using OpticLtd.Data;
+using OpticLtd.Domain.Configuration;
 using System.Text;
 
 namespace OpticLtd.Api
@@ -48,6 +49,7 @@ namespace OpticLtd.Api
       var clonedParams = tokenValidationParams.Clone();
       clonedParams.ValidateLifetime = false;
       services.AddSingleton(clonedParams);
+      services.AddSingleton(typeof(TokenServices));
 
       services.AddAuthentication(options =>
       {

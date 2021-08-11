@@ -29,36 +29,36 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Api.Model.Order>>> GetOrders([FromQuery] GetOrders.Query query)
+    public async Task<ActionResult<List<Domain.Model.Order>>> GetOrders([FromQuery] GetOrders.Query query)
     {
-      return _mapper.Map<List<Api.Model.Order>>(await _mediator.Send(query));
+      return _mapper.Map<List<Domain.Model.Order>>(await _mediator.Send(query));
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Model.Order>> GetProductById([FromQuery] GetOrderById.Query query)
+    public async Task<ActionResult<Domain.Model.Order>> GetProductById([FromQuery] GetOrderById.Query query)
     {
-      return _mapper.Map<Model.Order>(await _mediator.Send(query.Id));
+      return _mapper.Map<Domain.Model.Order>(await _mediator.Send(query.Id));
     }
 
     [HttpPost]
     public async Task<ActionResult> CreateOrder([FromBody] CreateOrder.Command request)
     {
       Data.Entities.Order order = await _mediator.Send(request);
-      return CreatedAtAction(nameof(GetOrders), new { orderId = order.OrderId }, _mapper.Map<Model.Order>(order));
+      return CreatedAtAction(nameof(GetOrders), new { orderId = order.OrderId }, _mapper.Map<Domain.Model.Order>(order));
     }
 
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteOrder(int id)
     {
-      _mapper.Map<Model.Order>(await _mediator.Send(new DeleteOrder.Command(id)));
+      _mapper.Map<Domain.Model.Order>(await _mediator.Send(new DeleteOrder.Command(id)));
 
       return NoContent();
     }
 
     [HttpPut]
-    public async Task<ActionResult<Model.Order>> UpdateProduct([FromQuery] UpdateOrder.Command command)
+    public async Task<ActionResult<Domain.Model.Order>> UpdateProduct([FromQuery] UpdateOrder.Command command)
     {
-      return _mapper.Map<Model.Order>(await _mediator.Send(command));
+      return _mapper.Map<Domain.Model.Order>(await _mediator.Send(command));
     }
   }
 }
