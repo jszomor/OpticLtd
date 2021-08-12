@@ -21,9 +21,9 @@ namespace OpticLtd.Api.Controllers
   public class TokenController : ControllerHelper
   {
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly TokenServices _tokenServices;
+    private readonly ITokenServices _tokenServices;
 
-    public TokenController(UserManager<IdentityUser> userManager, TokenServices tokenServices)
+    public TokenController(UserManager<IdentityUser> userManager, ITokenServices tokenServices)
     {
       _userManager = userManager;
       _tokenServices = tokenServices;

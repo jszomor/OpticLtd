@@ -30,11 +30,14 @@ namespace OpticLtd.Api
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      //services.AddTransient<ITokenServices, TokenServices>();
+      
       services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
 
       services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Defaultconnection")));
 
       var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+      
 
       var tokenValidationParams = new TokenValidationParameters
       {
@@ -49,7 +52,6 @@ namespace OpticLtd.Api
       var clonedParams = tokenValidationParams.Clone();
       clonedParams.ValidateLifetime = false;
       services.AddSingleton(clonedParams);
-      services.AddSingleton(typeof(TokenServices));
 
       services.AddAuthentication(options =>
       {

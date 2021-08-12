@@ -16,18 +16,21 @@ namespace OpticLtd.Api.Controllers
   public class AccountController : ControllerHelper
   {
     private readonly UserManager<IdentityUser> _userManager;
-    public TokenServices _tokenServices;
+    private readonly TokenRequest _tokenRequest;
+    //public ITokenServices _tokenServices;
 
-    public AccountController(UserManager<IdentityUser> userManager, TokenServices tokenServices)
+    public AccountController(UserManager<IdentityUser> userManager)//, ITokenServices tokenServices)
     {
       _userManager = userManager;
-      _tokenServices = tokenServices;
+      //_tokenServices = tokenServices;
     }
 
     [HttpPost]
     [Route("Login")]
     public async Task<IActionResult> Login([FromBody] UserRegistration user)
     {
+      TokenServices _tokenServices = new(TokenRequest tokenRequest, UserManager < IdentityUser > _userManager);
+
       if (ModelState.IsValid)
       {
         var existingUser = await _userManager.FindByEmailAsync(user.Email);

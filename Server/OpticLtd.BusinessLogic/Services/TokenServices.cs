@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OpticLtd.BusinessLogic.Services
 {
-  public class TokenServices
+  public class TokenServices : ITokenServices
   {
     private readonly TokenValidationParameters _tokenValidationParams;
     private readonly AppDbContext _context;
