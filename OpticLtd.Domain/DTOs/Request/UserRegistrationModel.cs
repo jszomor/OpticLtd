@@ -13,6 +13,6 @@ namespace OpticLtd.Domain.DTOs.Request
     [Required]
     public string Password { get; set; }
 
-    public string PhoneNumber { get; set; }    
+    public string PhoneNumber { get; set; }
   }
 }
