@@ -10,36 +10,36 @@ using OpticLtd.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OpticLtd.Api.Controllers
 {
-  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+  //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
   [ApiController]
   [Route("api/[controller]")]
   public class AdminController : ControllerHelper
   {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly IdentityUserRole<string> _identityUserRole;
-    private readonly ITokenServices _tokenServices;
+    //private readonly IdentityUserRole<string> _identityUserRole;
 
-    public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ITokenServices tokenServices)
+    public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager ) //, IdentityUserRole<string> identityUserRole)
     {
       _userManager = userManager;
       _roleManager = roleManager;
-      _tokenServices = tokenServices;
+      //_identityUserRole = identityUserRole;
     }
 
     #region User Management
 
     [HttpGet]
     [Route("GetUsers")]
-    public async Task<IActionResult> GetUsers()
+    public IActionResult GetUsers()
     {
-      var users = await _userManager.GetUserAsync();
+      var users = _userManager.Users.Select(x => new { x.Id, x.UserName, x.Email, x.PhoneNumber }).ToList();
 
-      if (!users.Any())
+      if (users == null)
       {
         return BadRequestAuth("No user found");
       }
@@ -48,13 +48,23 @@ namespace OpticLtd.Api.Controllers
 
     [HttpGet]
     [Route("GetUsersWithRoles")]
-    public IActionResult GetUsersWithRoles()
+    public async Task<IActionResult> GetUsersWithRoles(string role)
     {
-      var role = _roleManager.Roles.SingleOrDefault(m => m.Name == "role");
-      var users = _userManager.GetUsersInRoleAsync("");
-      var userRole = _identityUserRole.
+      var roles = _roleManager.Roles;
+      var users = await _userManager.GetUsersInRoleAsync(role);
+      foreach (var user in users)
+      {
+        var user2 = await _userManager.IsInRoleAsync(user, role);
+      }
+      //var userRoles = _identityUserRole.UserId;
 
+      //var query = from user in users
+      //            join roleUser in userRoles
+      //            on user.Id equals roleUser.UserId
+      //            select new
+      //            {
 
+      //            };
 
       if (!users.Any())
       {
@@ -67,7 +77,7 @@ namespace OpticLtd.Api.Controllers
     [Route("GetUserByName")]
     public IActionResult GetUsers(string name)
     {
-      var users = _userManager.FindByNameAsync(name));
+      var users = _userManager.FindByNameAsync(name);
 
       if (users.Result.UserName.StartsWith(name))
       {

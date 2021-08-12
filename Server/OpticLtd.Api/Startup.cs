@@ -68,7 +68,6 @@ namespace OpticLtd.Api
       services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<AppDbContext>();
 
-
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
       services.AddAutoMapper(typeof(Startup));
       services.AddMediatR(typeof(GetProducts));
