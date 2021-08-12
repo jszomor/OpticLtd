@@ -30,7 +30,6 @@ namespace OpticLtd.Api
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      //services.AddTransient<ITokenServices, TokenServices>();
       
       services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
 
@@ -38,6 +37,7 @@ namespace OpticLtd.Api
 
       var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
       
+      services.AddTransient<ITokenServices, TokenServices>();
 
       var tokenValidationParams = new TokenValidationParameters
       {

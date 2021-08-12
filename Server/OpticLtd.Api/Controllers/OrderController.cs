@@ -15,8 +15,7 @@ namespace OpticLtd.Api.Controllers
 
   [ApiController]
   [Route("api/[controller]")]
-  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Admin")]
-
+  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager, Admin")]
   public class OrderController : ControllerBase
   {
     private readonly IMapper _mapper;
@@ -35,7 +34,7 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Domain.Model.Order>> GetProductById([FromQuery] GetOrderById.Query query)
+    public async Task<ActionResult<Domain.Model.Order>> GetOrderById([FromQuery] GetOrderById.Query query)
     {
       return _mapper.Map<Domain.Model.Order>(await _mediator.Send(query.Id));
     }
@@ -56,7 +55,7 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPut]
-    public async Task<ActionResult<Domain.Model.Order>> UpdateProduct([FromQuery] UpdateOrder.Command command)
+    public async Task<ActionResult<Domain.Model.Order>> UpdateOrder([FromQuery] UpdateOrder.Command command)
     {
       return _mapper.Map<Domain.Model.Order>(await _mediator.Send(command));
     }

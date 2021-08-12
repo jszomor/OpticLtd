@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpticLtd.Data;
 using OpticLtd.Domain.Configuration;
@@ -20,15 +21,15 @@ namespace OpticLtd.BusinessLogic.Services
     private readonly AppDbContext _context;
     private readonly JwtConfig _jwtConfig;
 
-    public TokenServices(JwtConfig jwtConfig, AppDbContext context, TokenValidationParameters tokenValidationParams)
+    public TokenServices(IOptionsMonitor<JwtConfig> jwtConfig, AppDbContext context, TokenValidationParameters tokenValidationParams)
     {
-      _jwtConfig = jwtConfig;
+      _jwtConfig = jwtConfig.CurrentValue;
       _context = context;
       _tokenValidationParams = tokenValidationParams;
     }
 
 
-    public async Task<AuthResult> VerifyAndGenerateToken(TokenRequest tokenRequest, UserManager<IdentityUser> _userManager)
+    public async Task<AuthResult> VerifyAndGenerateToken(TokenRequestModel tokenRequest, UserManager<IdentityUser> _userManager)
     {
       var jwtTokenHandler = new JwtSecurityTokenHandler();
       try

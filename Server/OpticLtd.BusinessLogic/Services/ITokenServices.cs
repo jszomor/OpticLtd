@@ -8,6 +8,6 @@ namespace OpticLtd.BusinessLogic.Services
   public interface ITokenServices
   {
     Task<AuthResult> GenerateJwtToken(IdentityUser user);
-    Task<AuthResult> VerifyAndGenerateToken(TokenRequest tokenRequest, UserManager<IdentityUser> _userManager);
+    Task<AuthResult> VerifyAndGenerateToken(TokenRequestModel tokenRequest, UserManager<IdentityUser> _userManager);
   }
 }

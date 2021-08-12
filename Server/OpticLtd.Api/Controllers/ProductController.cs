@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace OpticLtd.Api.Controllers
 {
+  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager, Admin")]
   [ApiController]
   [Route("api/[controller]")]  
   public class ProductController : ControllerBase
@@ -23,20 +24,21 @@ namespace OpticLtd.Api.Controllers
       _mediator = mediator;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<List<Domain.Model.Product>>> GetProducts([FromQuery] GetProducts.Query query)
     {
       return _mapper.Map<List<Domain.Model.Product>>(await _mediator.Send(query));
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Domain.Model.Product>> GetProductById(int id)
     {
       return _mapper.Map<Domain.Model.Product>(await _mediator.Send(new GetProductById.Query(id)));
     }
 
-    [HttpPost]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    [HttpPost]    
     public async Task<ActionResult> CreateProduct([FromBody] CreateProduct.Command request)
     {
       Data.Entities.Product product = await _mediator.Send(request);
@@ -44,7 +46,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpDelete("{id:int}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public async Task<ActionResult> DeleteProduct(int id)
     {
       _mapper.Map<Domain.Model.Product>(await _mediator.Send(new DeleteProduct.Command(id)));
@@ -53,7 +54,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPut]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public async Task<ActionResult<Domain.Model.Product>> UpdateProduct([FromQuery] UpdateProduct.Command command)
     {
       return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));

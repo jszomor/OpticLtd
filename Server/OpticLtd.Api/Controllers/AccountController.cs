@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpticLtd.Api.Helper;
 using OpticLtd.BusinessLogic.Services;
@@ -11,26 +12,29 @@ using System.Threading.Tasks;
 
 namespace OpticLtd.Api.Controllers
 {
+  [Authorize]
   [ApiController]
   [Route("api/[controller]")]
   public class AccountController : ControllerHelper
   {
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly TokenRequest _tokenRequest;
-    //public ITokenServices _tokenServices;
+    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly ITokenServices _tokenServices;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AccountController(UserManager<IdentityUser> userManager)//, ITokenServices tokenServices)
+    public AccountController(UserManager<IdentityUser> userManager, ITokenServices tokenServices, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
     {
       _userManager = userManager;
-      //_tokenServices = tokenServices;
+      _tokenServices = tokenServices;
+      _signInManager = signInManager;
+      _roleManager = roleManager;
     }
 
+    [AllowAnonymous]
     [HttpPost]
     [Route("Login")]
-    public async Task<IActionResult> Login([FromBody] UserRegistration user)
+    public async Task<IActionResult> Login([FromBody] UserRegistrationModel user)
     {
-      TokenServices _tokenServices = new(TokenRequest tokenRequest, UserManager < IdentityUser > _userManager);
-
       if (ModelState.IsValid)
       {
         var existingUser = await _userManager.FindByEmailAsync(user.Email);
@@ -54,13 +58,23 @@ namespace OpticLtd.Api.Controllers
       return BadRequestAuth("Invalid payload");
     }
 
-
     [HttpPost]
-    [Route("Register")]
-    public async Task<IActionResult> Register([FromBody] UserRegistration user)
+    public async Task<IActionResult> Logout()
     {
+      await _signInManager.SignOutAsync();
+      return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("RegisterUser")]
+    public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationModel user)
+    {
+
       if (ModelState.IsValid)
       {
+        var role = await _roleManager.FindByNameAsync("User");
+
         var existingUser = await _userManager.FindByEmailAsync(user.Email);
 
         if (existingUser != null)
@@ -69,7 +83,10 @@ namespace OpticLtd.Api.Controllers
         }
 
         var newUser = new IdentityUser() { Email = user.Email, UserName = user.UserName, PhoneNumber = user.PhoneNumber };
-        var isCreated = await _userManager.CreateAsync(newUser, user.Password);
+        IdentityResult isCreated = await _userManager.CreateAsync(newUser, user.Password);
+        //var usersInRole = await _userManager.GetUsersInRoleAsync(role.Name);
+        //_userManager.AddToRoleAsync(newUser.Id, role);
+
 
         if (isCreated.Succeeded)
         {

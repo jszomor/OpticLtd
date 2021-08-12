@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace OpticLtd.Domain.DTOs.Request
 {
-  public class TokenRequest
+  public class UserLoginRequestModel
   {
     [Required]
-    public string Token { get; set; }
-    
+    [EmailAddress]
+    public string Email { get; set; }
+
     [Required]
-    public string RefreshToken { get; set; }
+    public string Password { get; set; }
+
   }
 }
