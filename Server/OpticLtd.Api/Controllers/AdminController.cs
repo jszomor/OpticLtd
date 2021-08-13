@@ -22,13 +22,12 @@ namespace OpticLtd.Api.Controllers
   {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
-    //private readonly IdentityUserRole<string> _identityUserRole;
 
-    public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager ) //, IdentityUserRole<string> identityUserRole)
+
+    public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
     {
       _userManager = userManager;
       _roleManager = roleManager;
-      //_identityUserRole = identityUserRole;
     }
 
     #region User Management
@@ -41,41 +40,27 @@ namespace OpticLtd.Api.Controllers
 
       if (users == null)
       {
-        return BadRequestAuth("No user found");
+        return BadRequest("No user found");
       }
       return Ok(users);
     }
 
     [HttpGet]
-    [Route("GetUsersWithRoles")]
-    public async Task<IActionResult> GetUsersWithRoles(string role)
+    [Route("GetUsersByRole")]
+    public async Task<IActionResult> GetUsersWithRoles([FromBody] string role)
     {
-      var roles = _roleManager.Roles;
       var users = await _userManager.GetUsersInRoleAsync(role);
-      foreach (var user in users)
-      {
-        var user2 = await _userManager.IsInRoleAsync(user, role);
-      }
-      //var userRoles = _identityUserRole.UserId;
-
-      //var query = from user in users
-      //            join roleUser in userRoles
-      //            on user.Id equals roleUser.UserId
-      //            select new
-      //            {
-
-      //            };
 
       if (!users.Any())
       {
-        return BadRequestAuth("No user found");
+        return BadRequest("No user found");
       }
       return Ok(users);
     }
 
     [HttpGet]
     [Route("GetUserByName")]
-    public IActionResult GetUsers(string name)
+    public IActionResult GetUserByName(string name)
     {
       var users = _userManager.FindByNameAsync(name);
 
@@ -83,12 +68,12 @@ namespace OpticLtd.Api.Controllers
       {
         return Ok(users);
       }
-      return BadRequestAuth("No user found");
+      return BadRequest("No user found");
     }
 
     [HttpPost]
     [Route("AddUser")]
-    public async Task<IActionResult> AddUser([FromBody] UserRegistrationModel user)
+    public async Task<IActionResult> AddUser(UserRegistrationModel user)
     {
       if (ModelState.IsValid)
       {
@@ -96,7 +81,7 @@ namespace OpticLtd.Api.Controllers
 
         if (existingUser != null)
         {
-          return BadRequestAuth("Email already in use");
+          return BadRequest("Email already in use");
         }
 
         var newUser = new IdentityUser() { Email = user.Email, UserName = user.UserName, PhoneNumber = user.PhoneNumber };
@@ -108,18 +93,18 @@ namespace OpticLtd.Api.Controllers
         }
         else
         {
-          return BadRequestAuth("User creation failed");
+          return BadRequest("User creation failed");
         }
       }
 
-      return BadRequestAuth("Invalid payload");
+      return BadRequest("Invalid payload");
     }
 
     [HttpPost]
     [Route("EditUser")]
     public async Task<IActionResult> EditUser(IdentityUser user)
     {
-      if (!ModelState.IsValid) return BadRequestAuth("Invalid payload");
+      if (!ModelState.IsValid) return BadRequest("Invalid payload");
 
       var existingUser = await _userManager.FindByIdAsync(user.Id);
 
@@ -132,22 +117,22 @@ namespace OpticLtd.Api.Controllers
         var result = await _userManager.UpdateAsync(existingUser);
         if (result.Succeeded)
         {
-          return Ok("Perform succeeded.");
+          return Ok($"Edit succeeded. User: {existingUser.UserName}");
         }
         else
         {
-          return BadRequestAuth("Update operation failed");
+          return BadRequest("Update operation failed");
         }
       }
       else
       {
-        return BadRequestAuth("Operation failed. Selected user does not exist.");
+        return BadRequest("Operation failed. Selected user does not exist.");
       }
     }
 
     [HttpPost]
     [Route("DeleteUser")]
-    public async Task<IActionResult> DeleteUser(string userId)
+    public async Task<IActionResult> DeleteUser([FromBody] string userId)
     {
       IdentityUser user = await _userManager.FindByIdAsync(userId);
 
@@ -161,12 +146,12 @@ namespace OpticLtd.Api.Controllers
         }
         else
         {
-          return BadRequestAuth("Delete operation failed");
+          return BadRequest("Delete operation failed");
         }
       }
       else
       {
-        return BadRequestAuth("Operation failed. Selected user does not exist.");
+        return BadRequest("Operation failed. Selected user does not exist.");
       }
     }
 
@@ -174,7 +159,7 @@ namespace OpticLtd.Api.Controllers
 
     #region Role Management
 
-    private readonly string[] ValidRoleNames = new[] { "Admin", "Manager", "User" };
+    private readonly string[] ValidRoleNames = new[] { "Admin", "Manager", "Customer", "User" };
 
 
     [HttpGet]
@@ -185,7 +170,7 @@ namespace OpticLtd.Api.Controllers
 
       if (!roles.Any())
       {
-        return BadRequestAuth("No roles found in database.");
+        return BadRequest("No roles found in database.");
       }
 
       return Ok(roles);
@@ -202,12 +187,12 @@ namespace OpticLtd.Api.Controllers
         return Ok(roles.Result.Name);
       }
 
-      return BadRequestAuth("No roles found in database.");
+      return BadRequest("No roles found in database.");
     }
 
     [HttpPost]
     [Route("CreateRole")]
-    public async Task<IActionResult> CreateRole(string roleName)
+    public async Task<IActionResult> CreateRole([FromBody] string roleName)
     {
 
       if (ValidRoleNames.Contains(roleName))
@@ -218,12 +203,12 @@ namespace OpticLtd.Api.Controllers
         }
         else
         {
-          return BadRequestAuth("Given role is already exist.");
+          return BadRequest("Given role is already exist.");
         }
       }
       else
       {
-        return BadRequestAuth("Invalid role name.");
+        return BadRequest("Invalid role name.");
       }
 
       return Ok("Perform succeeded.");
@@ -238,18 +223,20 @@ namespace OpticLtd.Api.Controllers
       {
         if (await _roleManager.RoleExistsAsync(roleModel.NewRole) == false)
         {
+          role.Name = roleModel.NewRole;
+          role.NormalizedName = roleModel.NewRole.ToUpper();
           await _roleManager.UpdateAsync(role);
         }
         else
         {
-          return BadRequestAuth("Given role is already exist.");
+          return BadRequest("Given role is already exist.");
         }
       }
       else
       {
-        return BadRequestAuth("Invalid role name.");
+        return BadRequest("Invalid role name.");
       }
-      return Ok("Perform succeeded.");
+      return Ok($"Role edit done. New role: {roleModel.NewRole}");
     }
 
     [HttpPost]
@@ -263,37 +250,50 @@ namespace OpticLtd.Api.Controllers
       }
       else
       {
-        return BadRequestAuth("Invalid role name.");
+        return BadRequest("Invalid role name.");
       }
-      return Ok("Perform succeeded.");
+      return Ok($"Role deleted. {role.Name}");
     }
     #endregion
 
     #region AssignRoles
 
     [HttpPost]
-    [Route("AddUserToRole")]
-    public async Task<IActionResult> AddUserToRole(RoleAssignModel assign)
+    [Route("ConnectsUserToRoleById")]
+    public async Task<IActionResult> ConnectsUserToRole(RoleAssignModel assign)
     {
       var user = await _userManager.FindByIdAsync(assign.UserId);
-      if (user == null) return BadRequestAuth("User not found");
+      if (user == null) return BadRequest("User not found");
 
-      var role = await _roleManager.FindByNameAsync(assign.RoleId);
-      if (role == null) return BadRequestAuth("Role not found");
+      var role = await _roleManager.FindByIdAsync(assign.RoleId);
+      if (role == null) return BadRequest("Role not found");
 
       var result = await _userManager.AddToRoleAsync(user, role.Name);
 
       if (result.Succeeded)
       {
-        return Ok("Assing done.");
+        return Ok($"Assign done. User: {user} >> Role: {role}");
       }
 
-      return BadRequestAuth("Something went wrong!");
+      return BadRequest("Something went wrong!");
     }
 
+    [HttpPost]
+    [Route("DisconnectsUserFromRole")]
+    public async Task<IActionResult> DisconnectsUserFromRole(RoleAssignModel assign)
+    {
+      var user = await _userManager.FindByIdAsync(assign.UserId);
+      var role = await _roleManager.FindByIdAsync(assign.RoleId);
 
+      var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
 
+      if (result.Succeeded)
+      {
+        return Ok($"Disconnects done. User: {user}, Role: {role}");
+      }
 
+      return BadRequest("Something went wrong!");
+    }
 
     #endregion
   }
