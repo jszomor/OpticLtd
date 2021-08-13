@@ -49,7 +49,7 @@ namespace OpticLtd.Api.Controllers
       return CreatedAtAction(nameof(GetOrders), new { orderId = order.OrderId }, _mapper.Map<Domain.Model.Order>(order));
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete]
     [Route("DeleteOrder")]
     public async Task<ActionResult> DeleteOrder(int id)
     {
@@ -60,7 +60,7 @@ namespace OpticLtd.Api.Controllers
 
     [HttpPut]
     [Route("UpdateOrder")]
-    public async Task<ActionResult<Domain.Model.Order>> UpdateOrder([FromQuery] UpdateOrder.Command command)
+    public async Task<ActionResult<Domain.Model.Order>> UpdateOrder([FromBody] UpdateOrder.Command command)
     {
       return _mapper.Map<Domain.Model.Order>(await _mediator.Send(command));
     }

@@ -31,7 +31,9 @@ namespace OpticLtd.BusinessLogic.Order.Commands
       public async Task<Data.Entities.Order> Handle(Command request, CancellationToken cancellationToken)
       {
         var order = _context.Orders.FirstOrDefault(x => x.OrderId == request._id);
+        var orderItem = _context.OrderItem.FirstOrDefault(x => x.OrderItemId == request._id);
         _context.Remove(order);
+        _context.Remove(orderItem);
         await _context.SaveChangesAsync();
         return order;
       }

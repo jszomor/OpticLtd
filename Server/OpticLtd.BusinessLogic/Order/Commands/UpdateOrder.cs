@@ -38,10 +38,10 @@ namespace OpticLtd.BusinessLogic.Order.Commands
           return null;
         }
 
-        order.CustomerName = request.CustomerName;
-        order.PhoneNumber = request.PhoneNumber;
-        order.Email = request.Email;
-        order.OrderItems = request.OrderItems;
+        order.CustomerName = request.CustomerName ?? order.CustomerName;
+        order.PhoneNumber = request.PhoneNumber ?? order.PhoneNumber;
+        order.Email = request.Email ?? order.Email;
+        order.OrderItems = request.OrderItems ?? order.OrderItems;
 
         _context.Update(order);
         await _context.SaveChangesAsync();
