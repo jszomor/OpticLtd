@@ -14,7 +14,7 @@ namespace OpticLtd.Api.Controllers
 {
   [Authorize]
   [ApiController]
-  [Route("api/[controller]")]
+  [Route("api/[controller]/[action]")]
   public class AccountController : ControllerHelper
   {
     private readonly UserManager<IdentityUser> _userManager;
@@ -32,7 +32,6 @@ namespace OpticLtd.Api.Controllers
 
     [AllowAnonymous]
     [HttpPost]
-    [Route("Login")]
     public async Task<IActionResult> Login([FromBody] UserRegistrationModel user)
     {
       if (ModelState.IsValid)
@@ -67,7 +66,6 @@ namespace OpticLtd.Api.Controllers
 
     [AllowAnonymous]
     [HttpPost]
-    [Route("RegisterUser")]
     public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationModel user)
     {
 

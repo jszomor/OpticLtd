@@ -12,7 +12,7 @@ namespace OpticLtd.Api.Controllers
 {
   //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager, Admin")]
   [ApiController]
-  [Route("api/[controller]")]  
+  [Route("api/[controller]/[action]")]  
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;
@@ -26,7 +26,6 @@ namespace OpticLtd.Api.Controllers
 
     [AllowAnonymous]
     [HttpGet]
-    [Route("GetProducts")]
     public async Task<ActionResult<List<Domain.Model.Product>>> GetProducts([FromQuery] GetProducts.Query query)
     {
       return _mapper.Map<List<Domain.Model.Product>>(await _mediator.Send(query));

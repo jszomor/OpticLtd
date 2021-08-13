@@ -14,7 +14,7 @@ namespace OpticLtd.Api.Controllers
 {
 
   [ApiController]
-  [Route("api/[controller]")]
+  [Route("api/[controller]/[action]")]
   //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager, Admin")]
   public class OrderController : ControllerBase
   {
@@ -28,21 +28,18 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpGet]
-    [Route("GetOrders")]
     public async Task<ActionResult<List<Domain.Model.Order>>> GetOrders([FromQuery] GetOrders.Query query)
     {
       return _mapper.Map<List<Domain.Model.Order>>(await _mediator.Send(query));
     }
 
     [HttpGet("{id:int}")]
-    [Route("GetOrderById")]
     public async Task<ActionResult<Domain.Model.Order>> GetOrderById([FromQuery] GetOrderById.Query query)
     {
       return _mapper.Map<Domain.Model.Order>(await _mediator.Send(query.Id));
     }
 
     [HttpPost]
-    [Route("CreateOrder")]
     public async Task<ActionResult> CreateOrder([FromBody] CreateOrder.Command request)
     {
       Data.Entities.Order order = await _mediator.Send(request);
@@ -50,7 +47,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpDelete]
-    [Route("DeleteOrder")]
     public async Task<ActionResult> DeleteOrder(int id)
     {
       _mapper.Map<Domain.Model.Order>(await _mediator.Send(new DeleteOrder.Command(id)));
@@ -59,7 +55,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPut]
-    [Route("UpdateOrder")]
     public async Task<ActionResult<Domain.Model.Order>> UpdateOrder([FromBody] UpdateOrder.Command command)
     {
       return _mapper.Map<Domain.Model.Order>(await _mediator.Send(command));

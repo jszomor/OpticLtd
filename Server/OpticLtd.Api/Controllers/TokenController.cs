@@ -13,7 +13,7 @@ namespace OpticLtd.Api.Controllers
 {
   [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager, Admin")]
   [ApiController]
-  [Route("api/[controller]")]
+  [Route("api/[controller]/[action]")]
   public class TokenController : ControllerHelper
   {
     private readonly UserManager<IdentityUser> _userManager;
@@ -26,7 +26,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPost]
-    [Route("RefreshToken")]
     public async Task<IActionResult> RefreshToken([FromBody] TokenRequestModel tokenRequest)
     {
       if(ModelState.IsValid)

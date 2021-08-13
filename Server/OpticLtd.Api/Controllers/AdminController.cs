@@ -17,7 +17,7 @@ namespace OpticLtd.Api.Controllers
 {
   //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
   [ApiController]
-  [Route("api/[controller]")]
+  [Route("api/[controller]/[action]")]
   public class AdminController : ControllerHelper
   {
     private readonly UserManager<IdentityUser> _userManager;
@@ -33,7 +33,6 @@ namespace OpticLtd.Api.Controllers
     #region User Management
 
     [HttpGet]
-    [Route("GetUsers")]
     public IActionResult GetUsers()
     {
       var users = _userManager.Users.Select(x => new { x.Id, x.UserName, x.Email, x.PhoneNumber }).ToList();
@@ -46,7 +45,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpGet]
-    [Route("GetUsersByRole")]
     public async Task<IActionResult> GetUsersWithRoles([FromBody] string role)
     {
       var users = await _userManager.GetUsersInRoleAsync(role);
@@ -59,7 +57,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpGet]
-    [Route("GetUserByName")]
     public IActionResult GetUserByName(string name)
     {
       var users = _userManager.FindByNameAsync(name);
@@ -72,7 +69,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPost]
-    [Route("AddUser")]
     public async Task<IActionResult> AddUser(UserRegistrationModel user)
     {
       if (ModelState.IsValid)
@@ -101,7 +97,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPost]
-    [Route("EditUser")]
     public async Task<IActionResult> EditUser(IdentityUser user)
     {
       if (!ModelState.IsValid) return BadRequest("Invalid payload");
@@ -131,7 +126,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPost]
-    [Route("DeleteUser")]
     public async Task<IActionResult> DeleteUser([FromBody] string userId)
     {
       IdentityUser user = await _userManager.FindByIdAsync(userId);
@@ -163,7 +157,6 @@ namespace OpticLtd.Api.Controllers
 
 
     [HttpGet]
-    [Route("GetRoles")]
     public IActionResult GetRoles()
     {
       var roles = _roleManager.Roles.ToList();
@@ -177,7 +170,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpGet]
-    [Route("GetRoleByName")]
     public IActionResult GetRoleByName(string name)
     {
       var roles = _roleManager.FindByNameAsync(name);
@@ -215,7 +207,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPost]
-    [Route("EditRole")]
     public async Task<IActionResult> EditRole(RoleChangeModel roleModel)
     {
       var role = await _roleManager.FindByNameAsync(roleModel.CurrentRole);
@@ -240,7 +231,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPost]
-    [Route("DeleteRole")]
     public async Task<IActionResult> DeleteRole(RoleChangeModel roleModel)
     {
       var role = await _roleManager.FindByNameAsync(roleModel.CurrentRole);
@@ -259,7 +249,6 @@ namespace OpticLtd.Api.Controllers
     #region AssignRoles
 
     [HttpPost]
-    [Route("AssignUserToRoleById")]
     public async Task<IActionResult> AssignUserToRole(RoleAssignModel assign)
     {
       var user = await _userManager.FindByIdAsync(assign.UserId);
@@ -279,7 +268,6 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpPost]
-    [Route("DisconnectsUserFromRole")]
     public async Task<IActionResult> DisconnectsUserFromRole(RoleAssignModel assign)
     {
       var user = await _userManager.FindByIdAsync(assign.UserId);
