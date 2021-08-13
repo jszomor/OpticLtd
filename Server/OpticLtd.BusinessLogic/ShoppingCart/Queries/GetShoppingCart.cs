@@ -15,7 +15,7 @@ namespace OpticLtd.BusinessLogic.ShoppingCart.Queries
     {
       public int CartItemId { get; set; }
       public string Description { get; set; }
-      public int UserId { get; set; }
+      public string UserId { get; set; }
       public Data.Entities.Product Product { get; set; }
       public int Quantity { get; set; }
     }
@@ -32,6 +32,7 @@ namespace OpticLtd.BusinessLogic.ShoppingCart.Queries
       public async Task<List<CartItem>> Handle(Query request, CancellationToken cancellationToken)
       {
         var result = await _context.CartItems
+          .Where(c => c.UserId  == request.UserId)
           .Where(c => request.CartItemId == 0 || c.CartItemId == request.CartItemId)
           .Where(c => request.Product.ProductId == 0 || c.Product.ProductId == request.Product.ProductId)
           .ToListAsync();

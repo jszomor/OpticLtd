@@ -35,11 +35,11 @@ namespace OpticLtd.Api.Controllers
     [HttpGet]
     public async Task<ActionResult<List<Domain.Model.CartItem>>> GetShoppingCart(GetShoppingCart.Query query)
     {
-      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-      var userName = User.FindFirstValue(ClaimTypes.Name);
-
       if (User.Identity.IsAuthenticated)
       {
+        var currentUserId = ((ClaimsIdentity)User.Identity).FindFirst("Id").Value;
+        query.UserId = currentUserId;
+
         return _mapper.Map<List<Domain.Model.CartItem>>(await _mediator.Send(query));
       }
       else
@@ -52,13 +52,10 @@ namespace OpticLtd.Api.Controllers
     public async Task<ActionResult<List<Domain.Model.CartItem>>> AddProductToCart(AddProductToCart.Command request)
     {
       var currentUserId = ((ClaimsIdentity)User.Identity).FindFirst("Id").Value;
-
       request.UserId = currentUserId;
 
-
-
-      return Ok();
+      Data.Entities.CartItem cartItem = await _mediator.Send(request);
+      return CreatedAtAction(nameof(GetShoppingCart), new { cartItem = cartItem.CartItemId }, _mapper.Map<Domain.Model.CartItem>(cartItem));
     }
-
   }
 }
