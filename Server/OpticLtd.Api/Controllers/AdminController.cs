@@ -259,8 +259,8 @@ namespace OpticLtd.Api.Controllers
     #region AssignRoles
 
     [HttpPost]
-    [Route("ConnectsUserToRoleById")]
-    public async Task<IActionResult> ConnectsUserToRole(RoleAssignModel assign)
+    [Route("AssignUserToRoleById")]
+    public async Task<IActionResult> AssignUserToRole(RoleAssignModel assign)
     {
       var user = await _userManager.FindByIdAsync(assign.UserId);
       if (user == null) return BadRequest("User not found");

@@ -84,14 +84,9 @@ namespace OpticLtd.Api.Controllers
 
         var newUser = new IdentityUser() { Email = user.Email, UserName = user.UserName, PhoneNumber = user.PhoneNumber };
         IdentityResult isCreated = await _userManager.CreateAsync(newUser, user.Password);
-        //var usersInRole = await _userManager.GetUsersInRoleAsync(role.Name);
-        //_userManager.AddToRoleAsync(newUser.Id, role);
-
 
         if (isCreated.Succeeded)
         {
-
-
           var jwtToken = await _tokenServices.GenerateJwtToken(newUser);
 
           return Ok(jwtToken);
