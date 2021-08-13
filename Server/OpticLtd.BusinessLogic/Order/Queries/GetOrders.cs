@@ -18,7 +18,6 @@ namespace OpticLtd.BusinessLogic.Order.Queries
       public string CustomerName { get; set; }
       public string Email { get; set; }
       public Data.Enum.OrderStatus Status { get; set; }
-      public DateTime MyProperty { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, List<Data.Entities.Order>>
@@ -34,7 +33,7 @@ namespace OpticLtd.BusinessLogic.Order.Queries
       {
 
         var result = await _context.Orders
-          .Where(o => request.OrderTime.UtcDateTime.ToString() == "0001. 01. 01. 0:00:00 +00:00" || o.OrderTime.UtcDateTime.ToString().StartsWith(request.OrderTime.UtcDateTime.ToString()))
+          .Where(o => request.OrderTime.ToString() == "0001. 01. 01. 0:00:00 +00:00" ||  o.OrderTime == request.OrderTime)
           .Where(o => request.CustomerName == null || o.CustomerName.StartsWith(request.CustomerName))
           .Where(o => request.Email == null ||o.Email.StartsWith(request.Email))
           .Where(o => request.Status == 0 || o.Status == request.Status)

@@ -29,7 +29,7 @@ namespace OpticLtd.Api.Controllers
 
     [HttpGet]
     [Route("GetOrders")]
-    public async Task<ActionResult<List<Domain.Model.Order>>> GetOrders(GetOrders.Query query)
+    public async Task<ActionResult<List<Domain.Model.Order>>> GetOrders([FromQuery] GetOrders.Query query)
     {
       return _mapper.Map<List<Domain.Model.Order>>(await _mediator.Send(query));
     }
