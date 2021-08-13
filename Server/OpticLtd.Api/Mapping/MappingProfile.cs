@@ -11,6 +11,7 @@ namespace OpticLtd.Api.Mapping
       CreateMap<Data.Entities.Order, Domain.Model.Order>();
       CreateMap<Data.Entities.OrderItem, Domain.Model.OrderItem>();
       CreateMap<Data.Entities.RefreshToken, Domain.Model.RefreshToken>();
+      CreateMap<Data.Entities.CartItem, Domain.Model.CartItem>();
     }
   }
 }
