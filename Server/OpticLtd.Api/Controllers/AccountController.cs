@@ -90,6 +90,8 @@ namespace OpticLtd.Api.Controllers
 
         if (isCreated.Succeeded)
         {
+
+
           var jwtToken = await _tokenServices.GenerateJwtToken(newUser);
 
           return Ok(jwtToken);

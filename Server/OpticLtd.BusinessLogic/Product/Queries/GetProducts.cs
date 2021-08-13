@@ -30,13 +30,15 @@ namespace OpticLtd.BusinessLogic.Product.Queries
 
       public async Task<List<Data.Entities.Product>> Handle(Query request, CancellationToken cancellationToken)
       {
-        return await _context.Products
+        var result = await _context.Products
           .Where(p => request.Name == null || p.ProductName.StartsWith(request.Name))
           .Where(p => request.Category == null || p.ProductCategory.StartsWith(request.Category))
           .Where(p => request.Gender == null || p.Gender == request.Gender)
           .Where(p => request.AgeGroup == null || p.AgeGroup == request.AgeGroup)
           .Where(p => request.Brand == null || p.Brand.StartsWith(request.Brand))
           .ToListAsync();
+
+        return result;
       }
     }
   }
