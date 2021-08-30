@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Server\OpticLtd.Data\OpticLtd.Data.csproj" />
+    <ProjectReference Include="..\OpticLtd.Data\OpticLtd.Data.csproj" />
   </ItemGroup>
 
 </Project>

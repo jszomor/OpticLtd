@@ -5,8 +5,6 @@ using OpticLtd.Api.Helper;
 using OpticLtd.BusinessLogic.Services;
 using OpticLtd.Domain.DTOs.Request;
 using OpticLtd.Domain.DTOs.Response;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
