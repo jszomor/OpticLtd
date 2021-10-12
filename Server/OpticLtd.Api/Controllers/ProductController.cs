@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpticLtd.BusinessLogic.Product.Commands;
 using OpticLtd.BusinessLogic.Product.Queries;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,9 +38,9 @@ namespace OpticLtd.Api.Controllers
         _logger.LogInformation("GetProducts response ok.");
         return _mapper.Map<List<Domain.Model.Product>>(await _mediator.Send(query));
       }
-      catch (System.Exception)
+      catch (Exception ex)
       {
-        _logger.LogError("Bad response from GetProducts.");
+        _logger.LogError(ex, "Bad response from GetProducts.");
         return null;
       }
     }
