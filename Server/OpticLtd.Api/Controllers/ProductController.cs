@@ -35,8 +35,9 @@ namespace OpticLtd.Api.Controllers
     {
       try
       {
+        var getProducts = _mapper.Map<List<Domain.Model.Product>>(await _mediator.Send(query));
         _logger.LogInformation("GetProducts response ok.");
-        return _mapper.Map<List<Domain.Model.Product>>(await _mediator.Send(query));
+        return getProducts;
       }
       catch (Exception ex)
       {
