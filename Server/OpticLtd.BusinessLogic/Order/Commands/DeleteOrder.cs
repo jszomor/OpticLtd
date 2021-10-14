@@ -11,7 +11,7 @@ namespace OpticLtd.BusinessLogic.Order.Commands
   {
     public class Command : ICommand<Data.Entities.Order>
     {
-      public readonly int _id;
+      public int Id { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Data.Entities.Order>
@@ -25,8 +25,8 @@ namespace OpticLtd.BusinessLogic.Order.Commands
 
       public async Task<Data.Entities.Order> Handle(Command request, CancellationToken cancellationToken)
       {
-        var order = _context.Orders.FirstOrDefault(x => x.OrderId == request._id);
-        var orderItem = _context.OrderItem.FirstOrDefault(x => x.OrderItemId == request._id);
+        var order = _context.Orders.FirstOrDefault(x => x.OrderId == request.Id);
+        var orderItem = _context.OrderItem.FirstOrDefault(x => x.OrderItemId == request.Id);
         _context.Remove(order);
         _context.Remove(orderItem);
         await _context.SaveChangesAsync();

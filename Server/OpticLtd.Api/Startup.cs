@@ -71,7 +71,7 @@ namespace OpticLtd.Api
 
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
       services.AddAutoMapper(typeof(Startup));
-      services.AddMediatR(typeof(GetProducts));
+      services.AddMediatR(typeof(GetProduct));
       services.AddControllers();
 
       services.AddAuthorization(options =>

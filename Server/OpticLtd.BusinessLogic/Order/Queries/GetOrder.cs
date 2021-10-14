@@ -10,10 +10,11 @@ using System.Threading.Tasks;
 
 namespace OpticLtd.BusinessLogic.Order.Queries
 {
-  public class GetOrders
+  public class GetOrder
   {
     public class Query : IRequest<List<Data.Entities.Order>>
     {
+      public int? Id { get; set; }
       public DateTimeOffset OrderTime { get; set; }
       public string CustomerName { get; set; }
       public string Email { get; set; }
@@ -31,8 +32,8 @@ namespace OpticLtd.BusinessLogic.Order.Queries
 
       public async Task<List<Data.Entities.Order>> Handle(Query request, CancellationToken cancellationToken)
       {
-
         var result = await _context.Orders
+          .Where(o => request.Id == null || request.Id == o.OrderId)
           .Where(o => request.OrderTime.ToString() == "0001. 01. 01. 0:00:00 +00:00" ||  o.OrderTime == request.OrderTime)
           .Where(o => request.CustomerName == null || o.CustomerName.StartsWith(request.CustomerName))
           .Where(o => request.Email == null ||o.Email.StartsWith(request.Email))

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OpticLtd.BusinessLogic.Product.Queries
 {
-  public class GetProducts
+  public class GetProduct
   {
     public class Query : IRequest<List<Data.Entities.Product>>
     {

@@ -14,7 +14,7 @@ namespace OpticLtd.Api.Controllers
 {
   //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager, Admin")]
   [ApiController]
-  [Route("api/[controller]")]
+  [Route("api/[controller]/[action]")]
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;
@@ -30,8 +30,7 @@ namespace OpticLtd.Api.Controllers
 
     [AllowAnonymous]
     [HttpGet]
-    [Route("GetProduct")]
-    public async Task<ActionResult<List<Domain.Model.Product>>> GetProduct([FromQuery] GetProducts.Query query)
+    public async Task<ActionResult<List<Domain.Model.Product>>> GetProduct([FromBody] GetProduct.Query query)
     {
       try
       {
@@ -46,30 +45,19 @@ namespace OpticLtd.Api.Controllers
       }
     }
 
-    //[AllowAnonymous]
-    //[HttpGet]
-    //[Route("GetProductById")]
-    //public async Task<ActionResult<Domain.Model.Product>> GetProductById([FromBody] GetProductById.Query query)
-    //{
-    //  return _mapper.Map<Domain.Model.Product>(await _mediator.Send(query));
-    //}
-
     [HttpPost]
-    [Route("CreateProduct")]
     public async Task<ActionResult<Domain.Model.Product>> CreateProduct([FromBody] CreateProduct.Command command)
     {
       return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }
 
     [HttpDelete]
-    [Route("DeleteProduct")]
     public async Task<ActionResult<Domain.Model.Product>> DeleteProduct([FromBody] DeleteProduct.Command command)
     {
       return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }
 
     [HttpPut]
-    [Route("UpdateProduct")]
     public async Task<ActionResult<Domain.Model.Product>> UpdateProduct([FromBody] UpdateProduct.Command command)
     {
       return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
