@@ -14,16 +14,7 @@ namespace OpticLtd.BusinessLogic.Product.Commands
   {
     public class Command : ICommand<Data.Entities.Product>
     {
-      public int _id { get; set; }
-
-      public Command(int Id)
-      {
-        _id = Id;
-      }
-      public Command()
-      {
-
-      }
+      public int Id { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Data.Entities.Product>
@@ -37,7 +28,7 @@ namespace OpticLtd.BusinessLogic.Product.Commands
 
       public async Task<Data.Entities.Product> Handle(Command request, CancellationToken cancellationToken)
       {
-        var product = _context.Products.FirstOrDefault(x => x.ProductId == request._id);
+        var product = _context.Products.FirstOrDefault(x => x.ProductId == request.Id);
         _context.Remove(product);
         await _context.SaveChangesAsync();
         return product;

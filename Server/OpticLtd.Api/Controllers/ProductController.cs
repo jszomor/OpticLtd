@@ -47,29 +47,30 @@ namespace OpticLtd.Api.Controllers
     }
 
     [AllowAnonymous]
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<Domain.Model.Product>> GetProductById(int id)
+    [HttpGet]
+    [Route("GetProductById")]
+    public async Task<ActionResult<Domain.Model.Product>> GetProductById([FromBody] GetProductById.Query query)
     {
-      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(new GetProductById.Query(id)));
+      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(query));
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateProduct([FromBody] CreateProduct.Command request)
+    [Route("CreateProduct")]
+    public async Task<ActionResult<Domain.Model.Product>> CreateProduct([FromBody] CreateProduct.Command command)
     {
-      Data.Entities.Product product = await _mediator.Send(request);
-      return CreatedAtAction(nameof(GetProducts), new { productId = product.ProductId }, _mapper.Map<Domain.Model.Product>(product));
+      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }
 
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeleteProduct(int id)
+    [HttpDelete]
+    [Route("DeleteProduct")]
+    public async Task<ActionResult<Domain.Model.Product>> DeleteProduct([FromBody] DeleteProduct.Command command)
     {
-      _mapper.Map<Domain.Model.Product>(await _mediator.Send(new DeleteProduct.Command(id)));
-
-      return NoContent();
+      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }
 
     [HttpPut]
-    public async Task<ActionResult<Domain.Model.Product>> UpdateProduct([FromQuery] UpdateProduct.Command command)
+    [Route("UpdateProduct")]
+    public async Task<ActionResult<Domain.Model.Product>> UpdateProduct([FromBody] UpdateProduct.Command command)
     {
       return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }

@@ -12,11 +12,6 @@ namespace OpticLtd.BusinessLogic.Order.Commands
     public class Command : ICommand<Data.Entities.Order>
     {
       public readonly int _id;
-
-      public Command(int id)
-      {
-        _id = id;
-      }
     }
 
     public class Handler : IRequestHandler<Command, Data.Entities.Order>
