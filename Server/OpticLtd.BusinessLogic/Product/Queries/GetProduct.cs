@@ -42,6 +42,11 @@ namespace OpticLtd.BusinessLogic.Product.Queries
 
         return result;
       }
+
+      public async Task<Data.Entities.Product> FindProductByIdAsync(int id)
+      {
+        return await _context.Products.FindAsync(id);
+      }
     }
   }
 }

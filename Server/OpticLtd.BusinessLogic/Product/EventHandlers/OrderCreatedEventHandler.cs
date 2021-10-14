@@ -27,7 +27,7 @@ namespace OpticLtd.BusinessLogic.Product.EventHandlers
 
     private async Task<int> ChangeProductStockAsync(int productId, int changeStock)
     {
-      var getProduct = new GetProductById.Handler(_context);
+      var getProduct = new GetProduct.Handler(_context);
       var product = await getProduct.FindProductByIdAsync(productId);
 
       int newStock = product.Stock + changeStock;
