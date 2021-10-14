@@ -15,6 +15,7 @@ using OpticLtd.BusinessLogic.Services;
 using OpticLtd.Data;
 using OpticLtd.Domain.Configuration;
 using System.Text;
+using Serilog;
 
 namespace OpticLtd.Api
 {
@@ -70,7 +71,7 @@ namespace OpticLtd.Api
 
       services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
       services.AddAutoMapper(typeof(Startup));
-      services.AddMediatR(typeof(GetProducts));
+      services.AddMediatR(typeof(GetProduct));
       services.AddControllers();
 
       services.AddAuthorization(options =>
@@ -113,11 +114,13 @@ namespace OpticLtd.Api
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
-        app.UseSwagger();
-        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OpticLtd.Api v1"));
+        //app.UseSwagger();
+        //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OpticLtd.Api v1"));
       }
 
       app.UseHttpsRedirection();
+
+      app.UseSerilogRequestLogging();
 
       app.UseRouting();
 

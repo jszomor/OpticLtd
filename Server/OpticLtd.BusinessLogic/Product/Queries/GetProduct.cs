@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace OpticLtd.BusinessLogic.Product.Queries
 {
-  public class GetProducts
+  public class GetProduct
   {
     public class Query : IRequest<List<Data.Entities.Product>>
     {
+      public int? Id { get; set; }
       public string Name { get; set; }
       public string Category { get; set; }
       public bool? Gender { get; set; }
@@ -31,6 +32,7 @@ namespace OpticLtd.BusinessLogic.Product.Queries
       public async Task<List<Data.Entities.Product>> Handle(Query request, CancellationToken cancellationToken)
       {
         var result = await _context.Products
+          .Where(p => request.Id == null || p.ProductId == request.Id)
           .Where(p => request.Name == null || p.ProductName.StartsWith(request.Name))
           .Where(p => request.Category == null || p.ProductCategory.StartsWith(request.Category))
           .Where(p => request.Gender == null || p.Gender == request.Gender)

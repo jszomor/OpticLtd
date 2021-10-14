@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 namespace OpticLtd.Api.Controllers
 {
 
+  //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager, Admin")]
   [ApiController]
   [Route("api/[controller]/[action]")]
-  //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager, Admin")]
   public class OrderController : ControllerBase
   {
     private readonly IMapper _mapper;
@@ -28,30 +28,21 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Domain.Model.Order>>> GetOrders([FromQuery] GetOrders.Query query)
+    public async Task<ActionResult<List<Domain.Model.Order>>> GetOrder([FromBody] GetOrder.Query query)
     {
       return _mapper.Map<List<Domain.Model.Order>>(await _mediator.Send(query));
     }
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<Domain.Model.Order>> GetOrderById([FromQuery] GetOrderById.Query query)
-    {
-      return _mapper.Map<Domain.Model.Order>(await _mediator.Send(query.Id));
-    }
-
     [HttpPost]
-    public async Task<ActionResult> CreateOrder([FromBody] CreateOrder.Command request)
+    public async Task<ActionResult<Domain.Model.Order>> CreateOrder([FromBody] CreateOrder.Command command)
     {
-      Data.Entities.Order order = await _mediator.Send(request);
-      return CreatedAtAction(nameof(GetOrders), new { orderId = order.OrderId }, _mapper.Map<Domain.Model.Order>(order));
+      return _mapper.Map<Domain.Model.Order>(await _mediator.Send(command));
     }
 
     [HttpDelete]
-    public async Task<ActionResult> DeleteOrder(int id)
+    public async Task<ActionResult<Domain.Model.Order>> DeleteOrder([FromBody] DeleteOrder.Command command)
     {
-      _mapper.Map<Domain.Model.Order>(await _mediator.Send(new DeleteOrder.Command(id)));
-
-      return NoContent();
+      return _mapper.Map<Domain.Model.Order>(await _mediator.Send(command));
     }
 
     [HttpPut]

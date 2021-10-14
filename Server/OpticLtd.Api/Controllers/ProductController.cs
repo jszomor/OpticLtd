@@ -3,8 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using OpticLtd.BusinessLogic.Product.Commands;
 using OpticLtd.BusinessLogic.Product.Queries;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,49 +14,51 @@ namespace OpticLtd.Api.Controllers
 {
   //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Manager, Admin")]
   [ApiController]
-  [Route("api/[controller]/[action]")]  
+  [Route("api/[controller]/[action]")]
   public class ProductController : ControllerBase
   {
     private readonly IMapper _mapper;
     private readonly IMediator _mediator;
+    private readonly ILogger<ProductController> _logger;
 
-    public ProductController(IMapper mapper, IMediator mediator)
+    public ProductController(IMapper mapper, IMediator mediator, ILogger<ProductController> logger)
     {
       _mapper = mapper;
       _mediator = mediator;
+      _logger = logger;
     }
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<List<Domain.Model.Product>>> GetProducts([FromQuery] GetProducts.Query query)
+    public async Task<ActionResult<List<Domain.Model.Product>>> GetProduct([FromBody] GetProduct.Query query)
     {
-      return _mapper.Map<List<Domain.Model.Product>>(await _mediator.Send(query));
+      try
+      {
+        var getProducts = _mapper.Map<List<Domain.Model.Product>>(await _mediator.Send(query));
+        _logger.LogInformation("GetProducts response ok.");
+        return getProducts;
+      }
+      catch (Exception ex)
+      {
+        _logger.LogError(ex, "Bad response from GetProducts.");
+        return null;
+      }
     }
 
-    [AllowAnonymous]
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<Domain.Model.Product>> GetProductById(int id)
+    [HttpPost]
+    public async Task<ActionResult<Domain.Model.Product>> CreateProduct([FromBody] CreateProduct.Command command)
     {
-      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(new GetProductById.Query(id)));
+      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }
 
-    [HttpPost]    
-    public async Task<ActionResult> CreateProduct([FromBody] CreateProduct.Command request)
+    [HttpDelete]
+    public async Task<ActionResult<Domain.Model.Product>> DeleteProduct([FromBody] DeleteProduct.Command command)
     {
-      Data.Entities.Product product = await _mediator.Send(request);
-      return CreatedAtAction(nameof(GetProducts), new { productId = product.ProductId }, _mapper.Map<Domain.Model.Product>(product));
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeleteProduct(int id)
-    {
-      _mapper.Map<Domain.Model.Product>(await _mediator.Send(new DeleteProduct.Command(id)));
-
-      return NoContent();
+      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }
 
     [HttpPut]
-    public async Task<ActionResult<Domain.Model.Product>> UpdateProduct([FromQuery] UpdateProduct.Command command)
+    public async Task<ActionResult<Domain.Model.Product>> UpdateProduct([FromBody] UpdateProduct.Command command)
     {
       return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }
