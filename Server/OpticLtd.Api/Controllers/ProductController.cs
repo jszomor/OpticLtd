@@ -30,8 +30,8 @@ namespace OpticLtd.Api.Controllers
 
     [AllowAnonymous]
     [HttpGet]
-    [Route("GetProducts")]
-    public async Task<ActionResult<List<Domain.Model.Product>>> GetProducts([FromQuery] GetProducts.Query query)
+    [Route("GetProduct")]
+    public async Task<ActionResult<List<Domain.Model.Product>>> GetProduct([FromQuery] GetProducts.Query query)
     {
       try
       {
@@ -46,13 +46,13 @@ namespace OpticLtd.Api.Controllers
       }
     }
 
-    [AllowAnonymous]
-    [HttpGet]
-    [Route("GetProductById")]
-    public async Task<ActionResult<Domain.Model.Product>> GetProductById([FromBody] GetProductById.Query query)
-    {
-      return _mapper.Map<Domain.Model.Product>(await _mediator.Send(query));
-    }
+    //[AllowAnonymous]
+    //[HttpGet]
+    //[Route("GetProductById")]
+    //public async Task<ActionResult<Domain.Model.Product>> GetProductById([FromBody] GetProductById.Query query)
+    //{
+    //  return _mapper.Map<Domain.Model.Product>(await _mediator.Send(query));
+    //}
 
     [HttpPost]
     [Route("CreateProduct")]
