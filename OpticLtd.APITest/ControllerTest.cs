@@ -1,4 +1,7 @@
+using MediatR;
+using Moq;
 using NUnit.Framework;
+using OpticLtd.BusinessLogic.Product.Queries;
 
 namespace OpticLtd.APITest
 {
@@ -7,11 +10,16 @@ namespace OpticLtd.APITest
     [SetUp]
     public void Setup()
     {
+
     }
 
     [Test]
-    public void Test1()
+    public void ProductControllerTest()
     {
+      //var mockProduct = new Mock<GetProduct.Query>();
+      //mockProduct.Setup(p => p.List())
+      //  .ReturnsAsync()
+
       Assert.Pass();
     }
   }
