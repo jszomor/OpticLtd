@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.BusinessLogic", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpticLtd.Domain", "Server\OpticLtd.Domain\OpticLtd.Domain.csproj", "{ACB9AB53-91E8-43BD-AE54-A7FFE050CCAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpticLtd.APITest", "OpticLtd.APITest\OpticLtd.APITest.csproj", "{44ABFCBE-4CA7-4B91-9B75-3BBF6B8A459F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{ACB9AB53-91E8-43BD-AE54-A7FFE050CCAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACB9AB53-91E8-43BD-AE54-A7FFE050CCAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACB9AB53-91E8-43BD-AE54-A7FFE050CCAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44ABFCBE-4CA7-4B91-9B75-3BBF6B8A459F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44ABFCBE-4CA7-4B91-9B75-3BBF6B8A459F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44ABFCBE-4CA7-4B91-9B75-3BBF6B8A459F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44ABFCBE-4CA7-4B91-9B75-3BBF6B8A459F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{1425F82E-93F0-4E6E-B696-DB2498D05EDB} = {C6C7C76F-B524-4F70-A208-347E7E6C8E7A}
 		{99B3EC73-6713-41F5-BF18-B314B1954929} = {C6C7C76F-B524-4F70-A208-347E7E6C8E7A}
 		{ACB9AB53-91E8-43BD-AE54-A7FFE050CCAE} = {C6C7C76F-B524-4F70-A208-347E7E6C8E7A}
+		{44ABFCBE-4CA7-4B91-9B75-3BBF6B8A459F} = {C6C7C76F-B524-4F70-A208-347E7E6C8E7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF13E91D-9D36-408F-8790-124BE94309B7}
