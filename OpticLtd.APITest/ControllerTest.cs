@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using OpticLtd.Api.Controllers;
+using OpticLtd.Api.Mapping;
 using OpticLtd.BusinessLogic.Product.Queries;
 using OpticLtd.Data;
 using OpticLtd.Data.Entities;
@@ -18,6 +19,20 @@ namespace OpticLtd.APITest
 {
   public class ControllerTest
   {
+    private readonly IMapper _mapper;
+    private readonly IMediator _mediator;
+    private readonly ILogger<ProductController> _logger;
+
+    public ControllerTest()
+    {
+      var mapperConfig = new MapperConfiguration(c =>
+      {
+        c.AddProfile<MappingProfile>();
+      });
+
+      _mapper = mapperConfig.CreateMapper();
+    }
+
     [SetUp]
     public void Setup()
     {
@@ -25,43 +40,30 @@ namespace OpticLtd.APITest
     }
 
     [Test]
-    public void ProductControllerTest()
+    public async Task ProductControllerTest()
     {
       //using (var mock = AutoMock.GetLoose())
       //{
+       
+      var mockQuery = new Mock<Query>();
 
-      //var mockQuery = new Mock<Query>();
 
-      var query = new Query();
-
-      var mockHandler = new Mock<IRequestHandler<Query, List<Product>>>()
-        .Setup(x => x.Handle(query, CancellationToken.None))
+      using (var mockHandler = AutoMock.GetLoose())
+      {
+        mockHandler.Mock<IRequestHandler<Query, List<Product>>>()
+        .Setup(x => x.Handle(mockQuery.Object, CancellationToken.None))
         .Returns(GetSampleProduct());
 
-      var mockMediator = new Mock<IMediator>();
-      var mockLogger = new Mock<ILogger<ProductController>>();
+        var cls = mockHandler.Create<GetProduct.Query>();
 
-      //mock.Mock<Handler>()
-      //    .Setup(x => x.Handle(query, CancellationToken.None))
-      //    .Returns(GetSampleProduct());
+        var mockMapper = new Mock<IMapper>();
+        var mockMediator = new Mock<IMediator>();
+        var mockLogger = new Mock<ILogger<ProductController>>();
 
-      //var cls = mock.Create<Handler>();
-      //var expected = GetSampleProduct();
+        var productController = new ProductController(_mapper, mockMediator.Object, mockLogger.Object);
+        var result = await productController.GetProduct(cls);
 
-      //var actual = cls.Handle(query, CancellationToken.None);
-
-      //var productController = new ProductController(_mapper, _mediator, _logger);
-      //var result = await productController.GetProduct(mockQuery);
-
-      //Assert.True(actual != null);
-      //Assert.Equal(expected.Count, actual.Count);
-
-      //for (int i = 0; i < expected.Count; i++)
-      //{
-      //  Assert.Equal(expected[i].FirstName, actual[i].FirstName);
-      //  Assert.Equal(expected[i].LastName, actual[i].LastName);
-      //}
-      //}
+      }
     }
 
     private Task<List<Product>> GetSampleProduct()
