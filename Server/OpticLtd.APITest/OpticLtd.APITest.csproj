@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Server\OpticLtd.Api\OpticLtd.Api.csproj" />
-    <ProjectReference Include="..\Server\OpticLtd.BusinessLogic\OpticLtd.BusinessLogic.csproj" />
+    <ProjectReference Include="..\OpticLtd.Api\OpticLtd.Api.csproj" />
+    <ProjectReference Include="..\OpticLtd.BusinessLogic\OpticLtd.BusinessLogic.csproj" />
   </ItemGroup>
 
 </Project>
