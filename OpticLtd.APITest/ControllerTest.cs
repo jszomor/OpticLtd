@@ -45,13 +45,18 @@ namespace OpticLtd.APITest
       //using (var mock = AutoMock.GetLoose())
       //{
        
-      var mockQuery = new Mock<Query>();
+      var query = new Query();
+
+      var mock = new Mock<IRequestHandler<Query, List<Product>>>();
+      mock.Setup(p => p.Handle(query, CancellationToken.None)).Returns(GetSampleProduct());
+
+
 
 
       using (var mockHandler = AutoMock.GetLoose())
       {
         mockHandler.Mock<IRequestHandler<Query, List<Product>>>()
-        .Setup(x => x.Handle(mockQuery.Object, CancellationToken.None))
+        .Setup(x => x.Handle(query, CancellationToken.None))
         .Returns(GetSampleProduct());
 
         var cls = mockHandler.Create<GetProduct.Query>();
