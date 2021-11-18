@@ -1,9 +1,12 @@
 using Autofac.Extras.Moq;
 using AutoMapper;
+using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using OpticLtd.Api;
 using OpticLtd.Api.Controllers;
 using OpticLtd.Api.Mapping;
 using OpticLtd.BusinessLogic.Product.Queries;
@@ -11,19 +14,27 @@ using OpticLtd.Data;
 using OpticLtd.Data.Entities;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using static OpticLtd.BusinessLogic.Product.Queries.GetProduct;
 
 namespace OpticLtd.APITest
 {
-  public class ControllerTest
+  public class TestController
   {
+    private readonly StartupMock _startupMock;
+    public TestController(StartupMock startupMock)
+    {
+      _startupMock = startupMock;
+    }
+
+
     private readonly IMapper _mapper;
     private readonly IMediator _mediator;
     private readonly ILogger<ProductController> _logger;
 
-    public ControllerTest()
+    public TestController()
     {
       var mapperConfig = new MapperConfiguration(c =>
       {
@@ -44,7 +55,10 @@ namespace OpticLtd.APITest
     {
       //using (var mock = AutoMock.GetLoose())
       //{
-       
+
+      var mockStartup = _startupMock.StartupInstance();
+
+
       var query = new Query();
 
       var mock = new Mock<IRequestHandler<Query, List<Product>>>();
@@ -66,7 +80,7 @@ namespace OpticLtd.APITest
         var mockLogger = new Mock<ILogger<ProductController>>();
 
         var productController = new ProductController(_mapper, mockMediator.Object, mockLogger.Object);
-        var result = await productController.GetProduct(cls);
+        //var result = await productController.GetProduct(cls);
 
       }
     }
@@ -90,6 +104,15 @@ namespace OpticLtd.APITest
 
       };
       return Task.FromResult(products);
+    }
+
+    [Test]
+    public async Task StartupStatusCodeTest()
+    {
+      var waf = new WebApplicationFactory<Startup>();
+      var client = waf.CreateDefaultClient();
+      var response = await client.GetAsync("api/product/GetProduct");
+      response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
   }
 }

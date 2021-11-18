@@ -30,7 +30,7 @@ namespace OpticLtd.Api.Controllers
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<List<Domain.Model.Product>>> GetProduct([FromBody] GetProduct.Query query)
+    public async Task<ActionResult<List<Domain.Model.Product>>> GetProduct([FromQuery] GetProduct.Query query)
     {
       try
       {
