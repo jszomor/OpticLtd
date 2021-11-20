@@ -68,9 +68,7 @@ namespace OpticLtd.APITest
     {
       var waf = new WebApplicationFactory<Startup>();
       var client = waf.CreateDefaultClient();
-      var response = await client.GetAsync(route);
-      var a = response.StatusCode;
-      return response;
+      return await client.GetAsync(route);
     }
 
     [Test]
@@ -80,7 +78,7 @@ namespace OpticLtd.APITest
     }
 
     [Test]
-    public void GetProductAssert_ShouldBe_Equal()
+    public void GetProductsAssert_ShouldBe_Equal()
     {
       var read = CallApi(GetProductEndPoint).Result.Content.ReadAsStringAsync().Result;
       var actualProducts = JsonConvert.DeserializeObject<List<Domain.Model.Product>>(read);
@@ -98,6 +96,31 @@ namespace OpticLtd.APITest
         Assert.AreEqual(expectedProducts[i].Gender, actualProducts[i].Gender);
         Assert.AreEqual(expectedProducts[i].AgeGroup, actualProducts[i].AgeGroup);
       }
+    }
+
+    [Test]
+    public void GetProductAssertNo6_ShouldBe_Equal()
+    {
+      var read = CallApi(GetProductEndPoint + "?Id=6").Result.Content.ReadAsStringAsync().Result;
+      var actualProduct = JsonConvert.DeserializeObject<List<Domain.Model.Product>>(read)[0];      
+      var expectedProduct = GetSampleProduct()[2];
+
+      Assert.AreEqual(expectedProduct.ProductId, actualProduct.ProductId);
+      Assert.AreEqual(expectedProduct.ProductCategory, actualProduct.ProductCategory);
+      Assert.AreEqual(expectedProduct.ProductName, actualProduct.ProductName);
+      Assert.AreEqual(expectedProduct.Description, actualProduct.Description);
+      Assert.AreEqual(expectedProduct.Stock, actualProduct.Stock);
+      Assert.AreEqual(expectedProduct.Picture, actualProduct.Picture);
+      Assert.AreEqual(expectedProduct.Brand, actualProduct.Brand);
+      Assert.AreEqual(expectedProduct.Gender, actualProduct.Gender);
+      Assert.AreEqual(expectedProduct.AgeGroup, actualProduct.AgeGroup);
+    }
+
+    public void GetProductNo6_AssertAsString_Should_Be_Equal()
+    {
+      var actualProduct = CallApi(GetProductEndPoint + "?Id=6").Result.Content.ReadAsStringAsync().Result;
+      var expectedProduct = JsonConvert.SerializeObject(GetSampleProduct()[2]);
+      Assert.AreEqual(expectedProduct, actualProduct);
     }
   }
 }
