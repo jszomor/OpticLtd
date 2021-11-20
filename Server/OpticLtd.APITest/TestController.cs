@@ -1,118 +1,103 @@
-using Autofac.Extras.Moq;
-using AutoMapper;
 using FluentAssertions;
-using MediatR;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Logging;
-using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using OpticLtd.Api;
-using OpticLtd.Api.Controllers;
-using OpticLtd.Api.Mapping;
-using OpticLtd.BusinessLogic.Product.Queries;
-using OpticLtd.Data;
-using OpticLtd.Data.Entities;
-using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading;
+using System.Net.Http;
 using System.Threading.Tasks;
-using static OpticLtd.BusinessLogic.Product.Queries.GetProduct;
 
 namespace OpticLtd.APITest
 {
   public class TestController
   {
-    private readonly StartupMock _startupMock;
-    public TestController(StartupMock startupMock)
+    private List<Domain.Model.Product> GetSampleProduct()
     {
-      _startupMock = startupMock;
-    }
-
-
-    private readonly IMapper _mapper;
-    private readonly IMediator _mediator;
-    private readonly ILogger<ProductController> _logger;
-
-    public TestController()
-    {
-      var mapperConfig = new MapperConfiguration(c =>
+      List<Domain.Model.Product> products = new List<Domain.Model.Product>
       {
-        c.AddProfile<MappingProfile>();
-      });
-
-      _mapper = mapperConfig.CreateMapper();
-    }
-
-    [SetUp]
-    public void Setup()
-    {
-
-    }
-
-    [Test]
-    public async Task ProductControllerTest()
-    {
-      //using (var mock = AutoMock.GetLoose())
-      //{
-
-      var mockStartup = _startupMock.StartupInstance();
-
-
-      var query = new Query();
-
-      var mock = new Mock<IRequestHandler<Query, List<Product>>>();
-      mock.Setup(p => p.Handle(query, CancellationToken.None)).Returns(GetSampleProduct());
-
-
-
-
-      using (var mockHandler = AutoMock.GetLoose())
-      {
-        mockHandler.Mock<IRequestHandler<Query, List<Product>>>()
-        .Setup(x => x.Handle(query, CancellationToken.None))
-        .Returns(GetSampleProduct());
-
-        var cls = mockHandler.Create<GetProduct.Query>();
-
-        var mockMapper = new Mock<IMapper>();
-        var mockMediator = new Mock<IMediator>();
-        var mockLogger = new Mock<ILogger<ProductController>>();
-
-        var productController = new ProductController(_mapper, mockMediator.Object, mockLogger.Object);
-        //var result = await productController.GetProduct(cls);
-
-      }
-    }
-
-    private Task<List<Product>> GetSampleProduct()
-    {
-      List<Product> products = new List<Product>
-      {
-        new Product
-        {
-          ProductId = 1,
-          ProductCategory = "Lencse",
-          ProductName = "Hoya"
-        },
-        new Product
+        new Domain.Model.Product
         {
           ProductId = 2,
+          ProductCategory = "Szemüveg Keret",
+          ProductName = "Keret edf",
+          Description = "string",
+          Stock = 3,
+          Picture = "string",
+          Brand = "string",
+          Gender = true,
+          AgeGroup = true,
+          FeatureId = 0,
+          ProductFeature = null
+        },
+        new Domain.Model.Product
+        {
+          ProductId = 3,
+          ProductCategory = "Szemüveg Lencse",
+          ProductName = "Lencse 123",
+          Description = "string",
+          Stock = 13,
+          Picture = "string",
+          Brand = "string",
+          Gender = true,
+          AgeGroup = true,
+          FeatureId = 0,
+          ProductFeature = null
+        },
+        new Domain.Model.Product
+        {
+          ProductId = 6,
           ProductCategory = "Szemüveg",
-          ProductName = "Rayban"
+          ProductName = "Keret",
+          Description = "Muanyag",
+          Stock = 8,
+          Picture = "SzemuvegPic.jpg",
+          Brand = "Hoya",
+          Gender = false,
+          AgeGroup = false,
+          FeatureId = 0,
+          ProductFeature = null
         }
-
       };
-      return Task.FromResult(products);
+      return products;
     }
 
-    [Test]
-    public async Task StartupStatusCodeTest()
+    string GetProductEndPoint { get { return "api/product/GetProduct"; } }
+
+    private async Task<HttpResponseMessage> CallApi(string route)
     {
       var waf = new WebApplicationFactory<Startup>();
       var client = waf.CreateDefaultClient();
-      var response = await client.GetAsync("api/product/GetProduct");
-      response.StatusCode.Should().Be(HttpStatusCode.OK);
+      var response = await client.GetAsync(route);
+      var a = response.StatusCode;
+      return response;
+    }
+
+    [Test]
+    public void GetProductApiStatusCode_Should_Be_Ok()
+    {
+      CallApi(GetProductEndPoint).Result.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Test]
+    public void GetProductAssert_ShouldBe_Equal()
+    {
+      var read = CallApi(GetProductEndPoint).Result.Content.ReadAsStringAsync().Result;
+      var actualProducts = JsonConvert.DeserializeObject<List<Domain.Model.Product>>(read);
+      var expectedProducts = GetSampleProduct();
+
+      for (int i = 0; i < actualProducts.Count; i++)
+      {
+        Assert.AreEqual(expectedProducts[i].ProductId, actualProducts[i].ProductId);
+        Assert.AreEqual(expectedProducts[i].ProductCategory, actualProducts[i].ProductCategory);
+        Assert.AreEqual(expectedProducts[i].ProductName, actualProducts[i].ProductName);
+        Assert.AreEqual(expectedProducts[i].Description, actualProducts[i].Description);
+        Assert.AreEqual(expectedProducts[i].Stock, actualProducts[i].Stock);
+        Assert.AreEqual(expectedProducts[i].Picture, actualProducts[i].Picture);
+        Assert.AreEqual(expectedProducts[i].Brand, actualProducts[i].Brand);
+        Assert.AreEqual(expectedProducts[i].Gender, actualProducts[i].Gender);
+        Assert.AreEqual(expectedProducts[i].AgeGroup, actualProducts[i].AgeGroup);
+      }
     }
   }
 }
