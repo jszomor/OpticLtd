@@ -85,7 +85,6 @@ namespace OpticLtd.APITest
     {
       var waf = new WebApplicationFactory<Startup>();
       return waf.CreateDefaultClient();
-      //return await client.GetAsync(route);
     }
 
     [Test]
@@ -109,46 +108,17 @@ namespace OpticLtd.APITest
       var responseDelete = CallApi().DeleteAsync(DeleteProductEndPoint + $"?productId={insertedProduct.ProductId}").Result;
       responseDelete.EnsureSuccessStatusCode();
 
-      var notFoundProduct = CallApi().GetAsync(GetProductEndPoint + $"?productId={insertedProduct.ProductId}").Result.Content.ReadAsStringAsync().Result;
+      //CallApi().GetAsync(GetProductEndPoint + $"?productId={insertedProduct.ProductId}").Result.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-      Assert.AreEqual("[]", notFoundProduct);
-      //Assert.Throws<KeyNotFoundException>(() => notFoundProducts);
+      var notFoundProduct = CallApi().GetAsync(GetProductEndPoint + $"?productId={insertedProduct.ProductId}").Result.RequestMessage.Content;
+
+      Assert.AreEqual(null, notFoundProduct);
     }
-
-    //[Test]
-    //public void GetTheLatestElement()
-    //{
-    //  var actualProducts = CallApi().GetAsync(GetProductEndPoint + "?productCategory=TestSzemüveg").Result.Content.ReadAsStringAsync().Result;
-    //  var expectedProduct = JsonConvert.SerializeObject(new List<Domain.Model.Product> { GetSampleProduct()[3] });
-
-    //  Assert.AreEqual(expectedProduct, actualProducts);
-    //}
 
     [Test]
     public void GetProductApiStatusCode_Should_Be_Ok()
     {
       CallApi().GetAsync(GetProductEndPoint).Result.StatusCode.Should().Be(HttpStatusCode.OK);
-    }
-
-    [Test]
-    public void GetProductsAssert_ShouldBe_Equal()
-    {
-      var read = CallApi().GetAsync(GetProductEndPoint).Result.Content.ReadAsStringAsync().Result;
-      var actualProducts = JsonConvert.DeserializeObject<List<Domain.Model.Product>>(read);
-      var expectedProducts = GetSampleProduct();
-
-      for (int i = 0; i < actualProducts.Count; i++)
-      {
-        Assert.AreEqual(expectedProducts[i].ProductId, actualProducts[i].ProductId);
-        Assert.AreEqual(expectedProducts[i].ProductCategory, actualProducts[i].ProductCategory);
-        Assert.AreEqual(expectedProducts[i].ProductName, actualProducts[i].ProductName);
-        Assert.AreEqual(expectedProducts[i].Description, actualProducts[i].Description);
-        Assert.AreEqual(expectedProducts[i].Stock, actualProducts[i].Stock);
-        Assert.AreEqual(expectedProducts[i].Picture, actualProducts[i].Picture);
-        Assert.AreEqual(expectedProducts[i].Brand, actualProducts[i].Brand);
-        Assert.AreEqual(expectedProducts[i].Gender, actualProducts[i].Gender);
-        Assert.AreEqual(expectedProducts[i].AgeGroup, actualProducts[i].AgeGroup);
-      }
     }
 
     [Test]
