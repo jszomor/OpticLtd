@@ -89,7 +89,7 @@ namespace OpticLtd.APITest
     }
 
     [Test]
-    public async Task MultipleFunctionProductTest()
+    public async Task MultipleFunctionProductEndPointTest()
     {
       var product = GetSampleProduct()[3];
       var productJson = JsonConvert.SerializeObject(product);
