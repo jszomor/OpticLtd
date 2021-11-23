@@ -109,9 +109,9 @@ namespace OpticLtd.APITest
       var responseDelete = CallApi().DeleteAsync(DeleteProductEndPoint + $"?productId={insertedProduct.ProductId}").Result;
       responseDelete.EnsureSuccessStatusCode();
 
-      var notFoundProducts = CallApi().GetAsync(GetProductEndPoint + $"?productId={insertedProduct.ProductId}").Result.Content.ReadAsStringAsync().Result;
+      var notFoundProduct = CallApi().GetAsync(GetProductEndPoint + $"?productId={insertedProduct.ProductId}").Result.Content.ReadAsStringAsync().Result;
 
-      Assert.AreEqual("[]", notFoundProducts);
+      Assert.AreEqual("[]", notFoundProduct);
       //Assert.Throws<KeyNotFoundException>(() => notFoundProducts);
     }
 
