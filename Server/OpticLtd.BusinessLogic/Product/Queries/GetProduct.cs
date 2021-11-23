@@ -12,9 +12,9 @@ namespace OpticLtd.BusinessLogic.Product.Queries
   {
     public class Query : IRequest<List<Data.Entities.Product>>
     {
-      public int? Id { get; set; }
-      public string Name { get; set; }
-      public string Category { get; set; }
+      public int? ProductId { get; set; }
+      public string ProductName { get; set; }
+      public string ProductCategory { get; set; }
       public bool? Gender { get; set; }
       public bool? AgeGroup { get; set; }
       public string Brand { get; set; }
@@ -32,9 +32,9 @@ namespace OpticLtd.BusinessLogic.Product.Queries
       public async Task<List<Data.Entities.Product>> Handle(Query request, CancellationToken cancellationToken)
       {
         var result = await _context.Products
-          .Where(p => request.Id == null || p.ProductId == request.Id)
-          .Where(p => request.Name == null || p.ProductName.StartsWith(request.Name))
-          .Where(p => request.Category == null || p.ProductCategory.StartsWith(request.Category))
+          .Where(p => request.ProductId == null || p.ProductId == request.ProductId)
+          .Where(p => request.ProductName == null || p.ProductName.StartsWith(request.ProductName))
+          .Where(p => request.ProductCategory == null || p.ProductCategory.StartsWith(request.ProductCategory))
           .Where(p => request.Gender == null || p.Gender == request.Gender)
           .Where(p => request.AgeGroup == null || p.AgeGroup == request.AgeGroup)
           .Where(p => request.Brand == null || p.Brand.StartsWith(request.Brand))

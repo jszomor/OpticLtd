@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using OpticLtd.Api;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -57,30 +58,82 @@ namespace OpticLtd.APITest
           AgeGroup = false,
           FeatureId = 0,
           ProductFeature = null
+        },
+        new Domain.Model.Product
+        {
+          ProductId = 7,
+          ProductCategory = "TestSzemüveg",
+          ProductName = "TestKeret",
+          Description = "TestMuanyag",
+          Stock = 8,
+          Picture = "SzemuvegPic.jpg",
+          Brand = "Hoya",
+          Gender = false,
+          AgeGroup = false,
+          FeatureId = 0,
+          ProductFeature = null
         }
       };
       return products;
     }
 
     string GetProductEndPoint { get { return "api/product/GetProduct"; } }
+    string CreateProductEndPoint { get { return "api/product/CreateProduct"; } }
+    string DeleteProductEndPoint { get { return "api/product/DeleteProduct"; } }
 
-    private async Task<HttpResponseMessage> CallApi(string route)
+    private HttpClient CallApi()
     {
       var waf = new WebApplicationFactory<Startup>();
-      var client = waf.CreateDefaultClient();
-      return await client.GetAsync(route);
+      return waf.CreateDefaultClient();
+      //return await client.GetAsync(route);
     }
+
+    [Test]
+    public async Task MultipleFunctionProductTest()
+    {
+      var product = GetSampleProduct()[3];
+      var productJson = JsonConvert.SerializeObject(product);
+      var stringContent = new StringContent(productJson, System.Text.Encoding.UTF8, "application/json");
+      var responseCreate = CallApi().PostAsync(CreateProductEndPoint, stringContent).Result;
+      responseCreate.EnsureSuccessStatusCode();
+
+      var responseBody = await responseCreate.Content.ReadAsStringAsync();
+      var insertedProduct = JsonConvert.DeserializeObject<Domain.Model.Product>(responseBody);
+      var actualProducts = CallApi().GetAsync(GetProductEndPoint + $"?productId={insertedProduct.ProductId}").Result.Content.ReadAsStringAsync().Result;
+      
+      product.ProductId = insertedProduct.ProductId;
+      var expectedProduct = JsonConvert.SerializeObject(new List<Domain.Model.Product> { product });
+
+      Assert.AreEqual(expectedProduct, actualProducts);
+
+      var responseDelete = CallApi().DeleteAsync(DeleteProductEndPoint + $"?productId={insertedProduct.ProductId}").Result;
+      responseDelete.EnsureSuccessStatusCode();
+
+      var notFoundProducts = CallApi().GetAsync(GetProductEndPoint + $"?productId={insertedProduct.ProductId}").Result.Content.ReadAsStringAsync().Result;
+
+      Assert.AreEqual("[]", notFoundProducts);
+      //Assert.Throws<KeyNotFoundException>(() => notFoundProducts);
+    }
+
+    //[Test]
+    //public void GetTheLatestElement()
+    //{
+    //  var actualProducts = CallApi().GetAsync(GetProductEndPoint + "?productCategory=TestSzemüveg").Result.Content.ReadAsStringAsync().Result;
+    //  var expectedProduct = JsonConvert.SerializeObject(new List<Domain.Model.Product> { GetSampleProduct()[3] });
+
+    //  Assert.AreEqual(expectedProduct, actualProducts);
+    //}
 
     [Test]
     public void GetProductApiStatusCode_Should_Be_Ok()
     {
-      CallApi(GetProductEndPoint).Result.StatusCode.Should().Be(HttpStatusCode.OK);
+      CallApi().GetAsync(GetProductEndPoint).Result.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Test]
     public void GetProductsAssert_ShouldBe_Equal()
     {
-      var read = CallApi(GetProductEndPoint).Result.Content.ReadAsStringAsync().Result;
+      var read = CallApi().GetAsync(GetProductEndPoint).Result.Content.ReadAsStringAsync().Result;
       var actualProducts = JsonConvert.DeserializeObject<List<Domain.Model.Product>>(read);
       var expectedProducts = GetSampleProduct();
 
@@ -101,7 +154,7 @@ namespace OpticLtd.APITest
     [Test]
     public void GetProductAssertNo6_ShouldBe_Equal()
     {
-      var read = CallApi(GetProductEndPoint + "?Id=6").Result.Content.ReadAsStringAsync().Result;
+      var read = CallApi().GetAsync(GetProductEndPoint + "?productId=6").Result.Content.ReadAsStringAsync().Result;
       var actualProduct = JsonConvert.DeserializeObject<List<Domain.Model.Product>>(read)[0];      
       var expectedProduct = GetSampleProduct()[2];
 
@@ -116,10 +169,11 @@ namespace OpticLtd.APITest
       Assert.AreEqual(expectedProduct.AgeGroup, actualProduct.AgeGroup);
     }
 
+    [Test]
     public void GetProductNo6_AssertAsString_Should_Be_Equal()
     {
-      var actualProduct = CallApi(GetProductEndPoint + "?Id=6").Result.Content.ReadAsStringAsync().Result;
-      var expectedProduct = JsonConvert.SerializeObject(GetSampleProduct()[2]);
+      var actualProduct = CallApi().GetAsync(GetProductEndPoint + "?productId=6").Result.Content.ReadAsStringAsync().Result;
+      var expectedProduct = JsonConvert.SerializeObject(new List<Domain.Model.Product> { GetSampleProduct()[2] });
       Assert.AreEqual(expectedProduct, actualProduct);
     }
   }

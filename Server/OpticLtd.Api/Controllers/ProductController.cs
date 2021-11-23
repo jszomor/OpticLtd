@@ -52,7 +52,7 @@ namespace OpticLtd.Api.Controllers
     }
 
     [HttpDelete]
-    public async Task<ActionResult<Domain.Model.Product>> DeleteProduct([FromBody] DeleteProduct.Command command)
+    public async Task<ActionResult<Domain.Model.Product>> DeleteProduct([FromQuery] DeleteProduct.Command command)
     {
       return _mapper.Map<Domain.Model.Product>(await _mediator.Send(command));
     }
