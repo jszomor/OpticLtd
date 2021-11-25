@@ -12,16 +12,7 @@ namespace OpticLtd.BusinessLogic.Product.Commands
   {
     public class Command : ICommand<Data.Entities.Product>
     {
-      //public Command()
-      //{
-
-      //}
-      //public Command(int Id)
-      //{
-      //  _id = Id;
-      //}
-
-      public int Id { get; set; }
+      public int ProductId { get; set; }
       public string ProductCategory { get; set; }
       public string ProductName { get; set; }
       public string Description { get; set; }
@@ -44,7 +35,7 @@ namespace OpticLtd.BusinessLogic.Product.Commands
 
       public async Task<Data.Entities.Product> Handle(Command request, CancellationToken cancellationToken)
       {
-        var product = _context.Products.FirstOrDefault(n => n.ProductId == request.Id);
+        var product = _context.Products.FirstOrDefault(n => n.ProductId == request.ProductId);
 
         if (product == null)
           return null;
